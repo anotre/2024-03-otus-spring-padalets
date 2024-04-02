@@ -1,4 +1,4 @@
-package ru.otus.hw.service;
+package ru.otus.hw.config;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,4 @@
-package ru.otus.hw.service;
+package ru.otus.hw.config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ public class ResourceProviderImpl implements ResourceProvider {
         var inputStream = classLoader.getResourceAsStream(filename);
 
         if (inputStream == null) {
-            throw new IOException();
+            throw new IOException("Resource could not be found.");
         }
 
         return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));

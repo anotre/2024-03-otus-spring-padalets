@@ -1,4 +1,4 @@
-package ru.otus.hw.service;
+package ru.otus.hw.config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
