@@ -6,7 +6,6 @@ import ru.otus.hw.domain.Question;
 
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
-
     private final IOService ioService;
 
     private final CsvQuestionDao dao;

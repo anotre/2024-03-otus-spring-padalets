@@ -10,7 +10,7 @@
     <bean id="testFileNameProvider" class="ru.otus.hw.config.AppProperties">
         <constructor-arg index="0" value="questions.csv"/>
     </bean>
-    <bean id="resourceReader" class="ru.otus.hw.config.ResourceProviderImpl"/>
+    <bean id="resourceReader" class="ru.otus.hw.reader.ResourceReaderImpl"/>
     <bean id="questionDao" class="ru.otus.hw.dao.CsvQuestionDao">
         <constructor-arg index="0" ref="testFileNameProvider"/>
         <constructor-arg index="1" ref="resourceReader"/>
