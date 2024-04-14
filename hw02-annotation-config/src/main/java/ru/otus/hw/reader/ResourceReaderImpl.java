@@ -1,8 +1,11 @@
 package ru.otus.hw.reader;
 
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.io.InputStream;
 
+@Component
 public class ResourceReaderImpl implements ResourceReader {
     @Override
     public InputStream getResourceAsStream(String filename) throws IOException {

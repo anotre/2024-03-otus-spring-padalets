@@ -1,16 +1,20 @@
 package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.otus.hw.dao.QuestionDao;
 import ru.otus.hw.domain.Student;
 import ru.otus.hw.domain.TestResult;
 
+@Service
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
 
     private final IOService ioService;
 
     private final QuestionDao questionDao;
+
+    private final QuestionExecuteService questionExecuteService;
 
     @Override
     public TestResult executeTestFor(Student student) {
@@ -20,9 +24,19 @@ public class TestServiceImpl implements TestService {
         var testResult = new TestResult(student);
 
         for (var question: questions) {
-            var isAnswerValid = false; // Задать вопрос, получить ответ
+            var answerCount = question.answers().size();
+            questionExecuteService.askQuestion(question);
+            questionExecuteService.giveOptions(question.answers());
+
+            if (answerCount == 0) {
+                continue;
+            }
+
+            var answer = questionExecuteService.askAnswer(question);
+            var isAnswerValid = questionExecuteService.analyseAnswer(question, answer);
             testResult.applyAnswer(question, isAnswerValid);
         }
+
         return testResult;
     }
 }
