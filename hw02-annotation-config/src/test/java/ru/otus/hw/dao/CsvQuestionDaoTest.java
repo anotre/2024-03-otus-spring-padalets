@@ -8,40 +8,31 @@ import ru.otus.hw.config.TestFileNameProvider;
 import ru.otus.hw.domain.Question;
 import ru.otus.hw.reader.ResourceReader;
 import ru.otus.hw.reader.ResourceReaderImpl;
-
-import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatRuntimeException;
 
 @DisplayName("СsvQuestionDao - читает вопросы и варианты ответов из csv файла")
 class CsvQuestionDaoTest {
-    private TestFileNameProvider testFileNameProvider;
-
-    private ResourceReader resourceReader;
-
     private QuestionDao sut;
 
-    private int rightAnswersCountToPass;
-
-    private String fileName;
+    private QuestionDao sutWithNoAnswers;
 
     @BeforeEach
-    void setUp() throws IOException {
-        var properties = new Properties();
-        properties.load(ClassLoader.getSystemResourceAsStream("application-test.properties"));
-        rightAnswersCountToPass = Integer.parseInt(properties.getProperty("test.rightAnswersCountToPass"));
-        fileName = properties.getProperty("test.fileName");
-        testFileNameProvider = new AppProperties(rightAnswersCountToPass, fileName);
-        resourceReader = new ResourceReaderImpl();
+    void setUp() {
+        ResourceReader resourceReader = new ResourceReaderImpl();
+        TestFileNameProvider testFileNameProvider = new AppProperties(3, "questions.csv");
         sut = new CsvQuestionDao(testFileNameProvider, resourceReader);
+        var resourceReaderIncorrect = new ResourceReaderImpl();
+        TestFileNameProvider testFileNameProviderIncorrect = new AppProperties(3, "questions-incorrect.csv");
+        sutWithNoAnswers = new CsvQuestionDao(testFileNameProviderIncorrect, resourceReaderIncorrect);
     }
 
     @Test
     @DisplayName("Находит все доступные вопросы")
     void shouldFindExpectedQuestionNumber() {
-        var expectedQuestionNumber = 4;
+        var expectedQuestionNumber = 3;
         assertThat(sut.findAll().size()).isEqualTo(expectedQuestionNumber);
     }
 
@@ -51,10 +42,15 @@ class CsvQuestionDaoTest {
         List<String> expectedQuestions = List.of(
                 "Is there life on Mars?",
                 "How should resources be loaded form jar in Java?",
-                "Which option is a good way to handle the exception?",
-                "To be or not to be?"
+                "Which option is a good way to handle the exception?"
         );
         List<String> questions = sut.findAll().stream().map(Question::text).toList();
         assertThat(questions).containsAll(expectedQuestions);
+    }
+
+    @Test
+    @DisplayName("Бросается исключение если встречается вопрос не имеющий ответов")
+    void shouldThrowIllegalStateExceptionIfNoAnswers() {
+        assertThatRuntimeException().isThrownBy(() -> sutWithNoAnswers.findAll());
     }
 }
