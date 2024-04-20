@@ -3,11 +3,11 @@ package ru.otus.hw.dao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import ru.otus.hw.config.AppProperties;
-import ru.otus.hw.config.TestFileNameProvider;
 import ru.otus.hw.domain.Question;
-import ru.otus.hw.reader.ResourceReader;
 import ru.otus.hw.reader.ResourceReaderImpl;
+
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,16 +17,15 @@ import static org.assertj.core.api.Assertions.assertThatRuntimeException;
 class CsvQuestionDaoTest {
     private QuestionDao sut;
 
-    private QuestionDao sutWithNoAnswers;
+    private AppProperties testFileNameProvider;
 
     @BeforeEach
     void setUp() {
-        ResourceReader resourceReader = new ResourceReaderImpl();
-        TestFileNameProvider testFileNameProvider = new AppProperties(3, "questions.csv");
+        var resourceReader = new ResourceReaderImpl();
+        testFileNameProvider = Mockito.mock(AppProperties.class);
+        Mockito.when(testFileNameProvider.getTestFileName()).thenReturn("questions.csv");
+        Mockito.when(testFileNameProvider.getRightAnswersCountToPass()).thenReturn(3);
         sut = new CsvQuestionDao(testFileNameProvider, resourceReader);
-        var resourceReaderIncorrect = new ResourceReaderImpl();
-        TestFileNameProvider testFileNameProviderIncorrect = new AppProperties(3, "questions-incorrect.csv");
-        sutWithNoAnswers = new CsvQuestionDao(testFileNameProviderIncorrect, resourceReaderIncorrect);
     }
 
     @Test
@@ -51,6 +50,7 @@ class CsvQuestionDaoTest {
     @Test
     @DisplayName("Бросается исключение если встречается вопрос не имеющий ответов")
     void shouldThrowIllegalStateExceptionIfNoAnswers() {
-        assertThatRuntimeException().isThrownBy(() -> sutWithNoAnswers.findAll());
+        Mockito.when(testFileNameProvider.getTestFileName()).thenReturn("questions-incorrect.csv");
+        assertThatRuntimeException().isThrownBy(() -> sut.findAll());
     }
 }
