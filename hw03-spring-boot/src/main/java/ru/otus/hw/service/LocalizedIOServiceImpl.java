@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class LocalizedIOServiceImpl implements LocalizedIOService {
-
     private final LocalizedMessagesService localizedMessagesService;
 
     private final IOService ioService;

@@ -8,7 +8,6 @@ import ru.otus.hw.domain.TestResult;
 @Service
 @RequiredArgsConstructor
 public class ResultServiceImpl implements ResultService {
-
     private final TestConfig testConfig;
 
     private final LocalizedIOService ioService;
