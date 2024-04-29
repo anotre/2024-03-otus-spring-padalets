@@ -4,28 +4,34 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.hw.config.AppProperties;
 import ru.otus.hw.domain.Question;
-import ru.otus.hw.reader.ResourceReaderImpl;
+import ru.otus.hw.reader.ResourceReader;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatRuntimeException;
 
+@SpringBootTest
 @DisplayName("СsvQuestionDao - читает вопросы и варианты ответов из csv файла")
 class CsvQuestionDaoTest {
+    @Autowired
     private QuestionDao sut;
 
+    @Autowired
+    private ResourceReader resourceReader;
+
+    @MockBean
     private AppProperties testFileNameProvider;
 
     @BeforeEach
     void setUp() {
-        var resourceReader = new ResourceReaderImpl();
-        testFileNameProvider = Mockito.mock(AppProperties.class);
         Mockito.when(testFileNameProvider.getTestFileName()).thenReturn("questions.csv");
         Mockito.when(testFileNameProvider.getRightAnswersCountToPass()).thenReturn(3);
-        sut = new CsvQuestionDao(testFileNameProvider, resourceReader);
     }
 
     @Test
