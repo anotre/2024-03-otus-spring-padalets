@@ -1,7 +1,7 @@
 package ru.otus.hw.security;
 
 public interface LoginContext<T> {
-    void login(T person);
+    void login(T login);
 
     boolean isLoggedIn();
 

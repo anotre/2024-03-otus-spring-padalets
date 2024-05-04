@@ -7,6 +7,7 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import ru.otus.hw.domain.Student;
 import ru.otus.hw.security.LoginContext;
+import ru.otus.hw.service.LocalizedIOService;
 import ru.otus.hw.service.ResultService;
 import ru.otus.hw.service.StudentService;
 import ru.otus.hw.service.TestService;
@@ -21,6 +22,8 @@ public class ApplicationCommands {
     private final ResultService resultService;
 
     private final TestService testService;
+
+    private final LocalizedIOService ioService;
 
 
     @ShellMethod(key = {"s", "start"}, value = "Start the test")
@@ -38,7 +41,9 @@ public class ApplicationCommands {
     }
 
     public Availability isTestingAvailable() {
-        return loginContext.isLoggedIn() ? Availability.available() : Availability.unavailable("Need to login");
+        return loginContext.isLoggedIn() ?
+                Availability.available() :
+                Availability.unavailable(ioService.getMessage("ApplicationCommands.need.to.login"));
     }
 
 }
