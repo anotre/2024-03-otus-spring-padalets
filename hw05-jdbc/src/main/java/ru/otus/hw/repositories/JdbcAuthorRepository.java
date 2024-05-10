@@ -19,13 +19,16 @@ public class JdbcAuthorRepository implements AuthorRepository {
 
     @Override
     public List<Author> findAll() {
-        return jdbc.getJdbcOperations().query("select id, name from authors", new AuthorRowMapper());
+        return jdbc.getJdbcOperations().query("select id, full_name from authors", new AuthorRowMapper());
     }
 
     @Override
     public Optional<Author> findById(long id) {
         var params = Collections.singletonMap("id", id);
-        var author = jdbc.queryForObject("select id, name from authors where id = :id", params, new AuthorRowMapper());
+        var author = jdbc.queryForObject(
+                "select id, full_name from authors where id = :id",
+                params,
+                new AuthorRowMapper());
         return Optional.ofNullable(author);
     }
 
@@ -35,7 +38,7 @@ public class JdbcAuthorRepository implements AuthorRepository {
         public Author mapRow(ResultSet rs, int i) throws SQLException {
             return new Author(
                     rs.getLong("id"),
-                    rs.getString("name")
+                    rs.getString("full_name")
             );
         }
     }

@@ -4,5 +4,8 @@ spring:
   sql:
     init:
       mode: always
-      data-locations: data.sql
-      schema-locations: schema.sql
+#      data-locations: db/migration/RT__insert_data_test.sql
+#      schema-locations: db/migration/V1__initial_schema.sql
+  flyway:
+    enabled: true
+    repeatable-sql-migration-prefix: RT

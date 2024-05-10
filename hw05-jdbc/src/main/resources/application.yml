@@ -4,10 +4,12 @@ spring:
   sql:
     init:
       mode: always
-      data-locations: data.sql
-      schema-locations: schema.sql
+#      data-locations: R__insert_data.sql
+#      schema-locations: V1__initial_schema.sql
   h2:
     console:
       path: /h2-console
       settings:
         web-allow-others: true
+  flyway:
+    enabled: true

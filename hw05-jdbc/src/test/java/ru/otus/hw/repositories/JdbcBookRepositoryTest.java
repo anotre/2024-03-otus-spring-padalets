@@ -43,9 +43,7 @@ class JdbcBookRepositoryTest {
     @MethodSource("getDbBooks")
     void shouldReturnCorrectBookById(Book expectedBook) {
         var actualBook = repositoryJdbc.findById(expectedBook.getId());
-        assertThat(actualBook).isPresent()
-                .get()
-                .isEqualTo(expectedBook);
+        assertThat(actualBook).hasValue(expectedBook);
     }
 
     @DisplayName("должен загружать список всех книг")
@@ -68,9 +66,7 @@ class JdbcBookRepositoryTest {
                 .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
 
         assertThat(repositoryJdbc.findById(returnedBook.getId()))
-                .isPresent()
-                .get()
-                .isEqualTo(returnedBook);
+                .hasValue(returnedBook);
     }
 
     @DisplayName("должен сохранять измененную книгу")
@@ -89,9 +85,7 @@ class JdbcBookRepositoryTest {
                 .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
 
         assertThat(repositoryJdbc.findById(returnedBook.getId()))
-                .isPresent()
-                .get()
-                .isEqualTo(returnedBook);
+                .hasValue(returnedBook);
     }
 
     @DisplayName("должен удалять книгу по id ")
@@ -99,7 +93,8 @@ class JdbcBookRepositoryTest {
     void shouldDeleteBook() {
         assertThat(repositoryJdbc.findById(1L)).isPresent();
         repositoryJdbc.deleteById(1L);
-        assertThat(repositoryJdbc.findById(1L)).isEmpty();
+        var book = repositoryJdbc.findById(1L);
+        assertThat(book).isEmpty();
     }
 
     private static List<Author> getDbAuthors() {
