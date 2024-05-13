@@ -1,7 +1,6 @@
 package ru.otus.hw.repositories;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -27,18 +26,15 @@ public class JdbcBookRepository implements BookRepository {
     @Override
     public Optional<Book> findById(long id) {
         var params = Collections.singletonMap("id", id);
-        try {
-            var book = jdbc.queryForObject("select b.id, b.title, b.author_id, a.full_name, b.genre_id, g.name " +
-                            "from books b " +
-                            "join genres g on b.genre_id = g.id " +
-                            "join authors a on b.author_id = a.id " +
-                            "where b.id = :id",
-                    params, new BookRowMapper());
+        List<Book> books = jdbc.query("select b.id, b.title, b.author_id, a.full_name, b.genre_id, g.name " +
+                        "from books b " +
+                        "left join genres g on b.genre_id = g.id " +
+                        "left join authors a on b.author_id = a.id " +
+                        "where b.id = :id",
+                params, new BookRowMapper());
 
-            return Optional.ofNullable(book);
-        } catch (EmptyResultDataAccessException exception) {
-            return Optional.empty();
-        }
+        return books.size() != 0 ? Optional.ofNullable(books.get(0)) : Optional.empty();
+
     }
 
     @Override
@@ -46,8 +42,8 @@ public class JdbcBookRepository implements BookRepository {
         return jdbc.getJdbcOperations().query(
                 "select b.id, b.title, b.author_id, a.full_name, b.genre_id, g.name " +
                     "from books b " +
-                    "join genres g on b.genre_id = g.id " +
-                    "join authors a on b.author_id = a.id ",
+                    "left join genres g on b.genre_id = g.id " +
+                    "left join authors a on b.author_id = a.id ",
                 new BookRowMapper());
     }
 

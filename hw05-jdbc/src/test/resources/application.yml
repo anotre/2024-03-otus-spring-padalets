@@ -1,11 +1,8 @@
 spring:
   datasource:
     url: jdbc:h2:mem:testdb
-  sql:
-    init:
-      mode: always
-#      data-locations: db/migration/RT__insert_data_test.sql
-#      schema-locations: db/migration/V1__initial_schema.sql
   flyway:
     enabled: true
-    repeatable-sql-migration-prefix: RT
+    locations:
+      - "classpath:db/migration/test-data"
+      - "classpath:db/migration/scheme"
