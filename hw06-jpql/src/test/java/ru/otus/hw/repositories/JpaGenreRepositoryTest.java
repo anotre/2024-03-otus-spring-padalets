@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Genre;
 
 import java.util.List;
@@ -19,8 +20,6 @@ class JpaGenreRepositoryTest {
     private static final long EXPECTED_GENRE_ID = 1L;
 
     private static final int EXPECTED_NUMBER_OF_GENRES = 3;
-
-    private static final List<Long> GENRE_IDS_LIST = List.of(1L, 2L, 3L);
 
     @Autowired
     private TestEntityManager em;
@@ -39,13 +38,17 @@ class JpaGenreRepositoryTest {
     @Test
     @DisplayName("Загружает список ожидаемых жанров")
     void shouldFindExpectedGenresList() {
+        List<Genre> expectedGenres = List.of(
+                new Genre(1L, "Genre_1"),
+                new Genre(2L, "Genre_2"),
+                new Genre(3L, "Genre_3")
+        );
         var actualGenres = genreRepository.findAll();
-
-        for (int i = 0; i < GENRE_IDS_LIST.size(); i++) {
-            var expectedGenre = em.find(Genre.class, GENRE_IDS_LIST.get(i));
-            assertThat(actualGenres.get(i))
-                    .usingRecursiveComparison().isEqualTo(expectedGenre);
-        }
+        assertThat(actualGenres).hasSize(expectedGenres.size())
+                .containsExactlyInAnyOrder(
+                        expectedGenres.get(0),
+                        expectedGenres.get(1),
+                        expectedGenres.get(2));
     }
 
     @Test

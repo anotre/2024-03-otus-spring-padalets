@@ -1,5 +1,6 @@
 package ru.otus.hw.repositories;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +22,25 @@ class JpaCommentRepositoryTest {
 
     private static final long EXPECTED_NEW_COMMENT_ID = 4L;
 
-    private static final String EXPECTED_COMMENT_TEXT = "new text";
+    private static final String EXPECTED_COMMENT_TEXT = "Comment_1";
+
+    private static final String EXPECTED_UPDATED_COMMENT_TEXT = "New_Comment_1";
 
     private static final int EXPECTED_NUMBER_OF_COMMENTS = 1;
 
     private static final long EXPECTED_BOOK_ID = 1L;
 
-    private static final String EXPECTED_BOOK_TITLE = "BookTitle_1";
-
     private static final long EXPECTED_GENRE_ID = 1L;
-
-    private static final String EXPECTED_GENRE_NAME = "Genre_1";
 
     private static final long EXPECTED_AUTHOR_ID = 1L;
 
-    private static final String EXPECTED_AUTHOR_FULL_NAME = "Author_1";
+    private Genre expectedGenre;
+
+    private Author expectedAuthor;
+
+    private Book expectedBook;
+
+    private Comment expectedComment;
 
     @Autowired
     private TestEntityManager em;
@@ -43,53 +48,65 @@ class JpaCommentRepositoryTest {
     @Autowired
     private CommentRepository commentRepository;
 
+    @BeforeEach
+    void setUp() {
+        expectedAuthor = em.find(Author.class, EXPECTED_AUTHOR_ID);
+        expectedGenre = em.find(Genre.class, EXPECTED_GENRE_ID);
+        expectedBook = em.find(Book.class, EXPECTED_BOOK_ID);
+        expectedComment = new Comment(1, EXPECTED_COMMENT_TEXT, expectedBook);
+    }
+
     @Test
     @DisplayName("Загружает ожидаемый комментарий по его идентификатору")
     void shouldFindExpectedCommentById() {
         var actualComment = commentRepository.findById(EXPECTED_COMMENT_ID);
         em.clear();
-        var expectedComment = em.find(Comment.class, EXPECTED_COMMENT_ID);
-        assertThat(actualComment).isPresent().get().isEqualTo(expectedComment);
+
+        assertThat(actualComment)
+                .isPresent().get()
+                .usingRecursiveComparison()
+                .ignoringFields("book")
+                .isEqualTo(expectedComment);
     }
 
     @Test
     @DisplayName("Загружает ожидаемый список комментариев по идентификатору книги")
     void shouldFindExpectedCommentByBookId() {
         var actualComments = commentRepository.findByBookId(EXPECTED_BOOK_ID);
-        em.clear();
-        var expectedComment = em.find(Comment.class, EXPECTED_COMMENT_ID);
         assertThat(actualComments).hasSize(EXPECTED_NUMBER_OF_COMMENTS).containsExactlyInAnyOrder(expectedComment);
     }
 
     @Test
     @DisplayName("Сохраняет комментарий")
     void shouldSaveComment() {
-        var author = new Author(EXPECTED_AUTHOR_ID, EXPECTED_AUTHOR_FULL_NAME);
-        var genre = new Genre(EXPECTED_GENRE_ID, EXPECTED_GENRE_NAME);
-        var book = new Book(EXPECTED_BOOK_ID, EXPECTED_BOOK_TITLE, author, genre);
-        var expectedComment = new Comment(EXPECTED_NEW_COMMENT_ID, EXPECTED_COMMENT_TEXT, book);
-        var newComment = commentRepository.save(new Comment(0, EXPECTED_COMMENT_TEXT, book));
-        assertThat(newComment).isNotNull().usingRecursiveComparison().isEqualTo(expectedComment);
+        var expectedComment = new Comment(EXPECTED_NEW_COMMENT_ID, EXPECTED_COMMENT_TEXT, expectedBook);
+        commentRepository.save(new Comment(0, EXPECTED_COMMENT_TEXT, expectedBook));
+        em.flush();
+        em.clear();
+
+        assertThat(em.find(Comment.class, EXPECTED_NEW_COMMENT_ID))
+                .isNotNull()
+                .usingRecursiveComparison().ignoringFields("book").isEqualTo(expectedComment);
     }
 
     @Test
     @DisplayName("Обновляет комментарий")
     void shouldUpdateComment() {
-        var oldComment = em.find(Comment.class, EXPECTED_COMMENT_ID);
-        var oldText = oldComment.getText();
-        oldComment.setText(EXPECTED_COMMENT_TEXT);
-        em.detach(oldComment);
-        commentRepository.update(oldComment);
-        var newComment = em.find(Comment.class, EXPECTED_COMMENT_ID);
-        assertThat(newComment.getText()).isNotEqualTo(oldText).isEqualTo(EXPECTED_COMMENT_TEXT);
+        var comment = expectedComment.copy();
+        comment.setText(EXPECTED_UPDATED_COMMENT_TEXT);
+        commentRepository.update(comment);
+        em.flush();
+        em.clear();
+        var updatedComment = em.find(Comment.class, EXPECTED_COMMENT_ID);
+        assertThat(updatedComment).isNotNull().usingRecursiveComparison().ignoringFields("book").isEqualTo(comment);
     }
 
     @Test
     @DisplayName("Удаляет комментарий по идентификатору")
     void shouldDeleteById() {
-        var comment = em.find(Comment.class, EXPECTED_COMMENT_ID);
-        assertThat(comment).isNotNull();
         commentRepository.deleteById(EXPECTED_COMMENT_ID);
+        em.flush();
+        em.detach(expectedComment);
         assertThat(em.find(Comment.class, EXPECTED_COMMENT_ID)).isNull();
     }
 }

@@ -20,8 +20,6 @@ class JpaAuthorRepositoryTest {
 
     private static final int EXPECTED_NUMBER_OF_AUTHORS = 3;
 
-    private static final List<Long> AUTHOR_IDS_LIST = List.of(1L, 2L, 3L);
-
     @Autowired
     private TestEntityManager em;
 
@@ -38,13 +36,17 @@ class JpaAuthorRepositoryTest {
     @Test
     @DisplayName("Загружает список ожидаемых авторов")
     void shouldFindExpectedAuthorsList() {
+        List<Author> expectedAuthors = List.of(
+                new Author(1L, "Author_1"),
+                new Author(2L, "Author_2"),
+                new Author(3L, "Author_3")
+        );
         var actualAuthors = authorRepository.findAll();
-        em.clear();
-
-        for (int i = 0; i < AUTHOR_IDS_LIST.size(); i++) {
-            var expectedAuthor = em.find(Author.class, AUTHOR_IDS_LIST.get(i));
-            assertThat(actualAuthors.get(i)).usingRecursiveComparison().isEqualTo(expectedAuthor);
-        }
+        assertThat(actualAuthors).hasSize(expectedAuthors.size())
+                .containsExactlyInAnyOrder(
+                        expectedAuthors.get(0),
+                        expectedAuthors.get(1),
+                        expectedAuthors.get(2));
     }
 
     @Test

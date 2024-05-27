@@ -9,9 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,18 +19,6 @@ import ru.otus.hw.models.prototype.Copyable;
 
 @Entity
 @Table(name = "comments")
-@NamedEntityGraph(name = "comment-entity-graph",
-        attributeNodes = {@NamedAttributeNode(value = "book", subgraph = "book-entity-subgraph")},
-        subgraphs = {
-                @NamedSubgraph(
-                        name = "book-entity-subgraph",
-                        attributeNodes = {
-                                @NamedAttributeNode("author"),
-                                @NamedAttributeNode("genre"),
-                        }
-                )
-        }
-)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
