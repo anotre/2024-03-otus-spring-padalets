@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
@@ -16,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayName("Репозиторий на основе Jpa для работы с сущностями комментариев")
-@Import(CommentRepositoryCustomImpl.class)
 class JpaCommentRepositoryTest {
     private static final long EXPECTED_COMMENT_ID = 1L;
 
@@ -94,7 +92,7 @@ class JpaCommentRepositoryTest {
     void shouldUpdateComment() {
         var comment = expectedComment.copy();
         comment.setText(EXPECTED_UPDATED_COMMENT_TEXT);
-        commentRepository.update(comment);
+        commentRepository.save(comment);
         em.flush();
         em.clear();
         var updatedComment = em.find(Comment.class, EXPECTED_COMMENT_ID);

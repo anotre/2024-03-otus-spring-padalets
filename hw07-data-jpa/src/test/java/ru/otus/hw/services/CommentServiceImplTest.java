@@ -63,7 +63,7 @@ class CommentServiceImplTest {
     }
 
     @Test
-    @DisplayName("findById")
+    @DisplayName("Загружает ожидаемый комментарий по идентификатору")
     void shouldFindExpectedCommentById() {
         var actualComment = commentService.findById(EXPECTED_COMMENT_ID);
         expectedComment.setId(EXPECTED_COMMENT_ID);
@@ -75,7 +75,7 @@ class CommentServiceImplTest {
     }
 
     @Test
-    @DisplayName("findByBookId")
+    @DisplayName("Загружает список комментариев по идентификатору книги")
     void shouldFindExpectedCommentListByBookId() {
         var actualComments = commentService.findByBookId(EXPECTED_BOOK_ID);
         expectedComment.setId(EXPECTED_COMMENT_ID);
@@ -85,7 +85,7 @@ class CommentServiceImplTest {
     }
 
     @Test
-    @DisplayName("insert")
+    @DisplayName("Сохраняет новый комментарий")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void shouldCreateComment() {
         var newComment = commentService.insert(EXPECTED_COMMENT_TEXT, EXPECTED_BOOK_ID);
@@ -94,7 +94,7 @@ class CommentServiceImplTest {
     }
 
     @Test
-    @DisplayName("update")
+    @DisplayName("Обновляет существующий комментарий")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void shouldChangeExistingComment() {
         var updatedComment = commentService.update(EXPECTED_COMMENT_ID, EXPECTED_UPDATED_COMMENT_TEXT, EXPECTED_BOOK_ID);
@@ -104,7 +104,7 @@ class CommentServiceImplTest {
     }
 
     @Test
-    @DisplayName("deleteById")
+    @DisplayName("Удаляет комментарий по идентификатору")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void shouldDeleteCommentById() {
         assertThat(commentService.findById(EXPECTED_COMMENT_ID)).isPresent();

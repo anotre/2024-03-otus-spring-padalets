@@ -53,6 +53,6 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(bookId)));
         var comment = new Comment(id, text, book);
 
-        return id == 0 ? commentRepository.save(comment) : commentRepository.update(comment);
+        return commentRepository.save(comment);
     }
 }
