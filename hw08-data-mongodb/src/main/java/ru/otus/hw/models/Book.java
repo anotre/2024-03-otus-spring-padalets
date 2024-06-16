@@ -14,7 +14,7 @@ import ru.otus.hw.models.prototype.Copyable;
 @Data
 public class Book implements Copyable<Book> {
     @Id
-    private long id;
+    private String id;
 
     private String title;
 

@@ -13,7 +13,7 @@ import ru.otus.hw.models.prototype.Copyable;
 @Data
 public class Author implements Copyable<Author> {
     @Id
-    private long id;
+    private String id;
 
     private String fullName;
 

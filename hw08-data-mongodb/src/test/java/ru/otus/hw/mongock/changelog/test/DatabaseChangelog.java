@@ -19,38 +19,33 @@ public class DatabaseChangelog {
     private static final String MAIN_AUTHOR = "mongock";
 
     private final List<Genre> genres = List.of(
-            new Genre("Genre_1"),
-            new Genre("Genre_2"),
-            new Genre("Genre_3")
+            new Genre("1","Genre_1"),
+            new Genre("2","Genre_2"),
+            new Genre("3","Genre_3")
     );
 
     private final List<Author> authors = List.of(
-            new Author("Author_1"),
-            new Author("Author_2"),
-            new Author("Author_3")
+            new Author("1","Author_1"),
+            new Author("2","Author_2"),
+            new Author("3","Author_3")
     );
 
     private final List<Book> books = List.of(
-            new Book("BookTitle_1", authors.get(0), genres.get(0)),
-            new Book("BookTitle_2", authors.get(1), genres.get(1)),
-            new Book("BookTitle_3", authors.get(2), genres.get(2))
+            new Book("1","BookTitle_1", authors.get(0), genres.get(0)),
+            new Book("2","BookTitle_2", authors.get(1), genres.get(1)),
+            new Book("3","BookTitle_3", authors.get(2), genres.get(2))
     );
 
     private final List<Comment> comments = List.of(
-            new Comment("Comment_1", books.get(0)),
-            new Comment("Comment_2", books.get(1)),
-            new Comment("Comment_3", books.get(2))
+            new Comment("1","Comment_1", books.get(0)),
+            new Comment("2","Comment_2", books.get(1)),
+            new Comment("3","Comment_3", books.get(2))
 
     );
 
-    @ChangeSet(order = "000", id = "dropDb", runAlways = true, author = MAIN_AUTHOR)
+    @ChangeSet(order = "001", id = "dropDb", runAlways = true, author = MAIN_AUTHOR)
     public void dropDb(MongoDatabase db) {
         db.drop();
-    }
-
-    @ChangeSet(order = "001", id = "createSequenceCollection", author = MAIN_AUTHOR)
-    public void createSequenceCollection(MongoDatabase db) {
-        db.createCollection("db_sequence");
     }
 
     @ChangeSet(order = "002", id = "insertGenres", author = MAIN_AUTHOR)

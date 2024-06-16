@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
@@ -19,11 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataMongoTest
 @DisplayName("Сервис для работы с сущностями комментариев")
 @ComponentScan({"ru.otus.hw.repositories", "ru.otus.hw.services", "ru.otus.hw.events"})
-@Transactional(propagation = Propagation.NEVER)
 class CommentServiceImplTest {
-    private static final long EXPECTED_COMMENT_ID = 1L;
-
-    private static final long EXPECTED_NEW_COMMENT_ID = 4L;
+    private static final String EXPECTED_COMMENT_ID = "1";
 
     private static final String EXPECTED_COMMENT_TEXT = "Comment_1";
 
@@ -31,15 +26,15 @@ class CommentServiceImplTest {
 
     private static final int EXPECTED_NUMBER_OF_COMMENTS_BY_BOOK_ID = 1;
 
-    private static final long EXPECTED_BOOK_ID = 1L;
+    private static final String EXPECTED_BOOK_ID = "1";
 
     private static final String EXPECTED_BOOK_TITLE = "BookTitle_1";
 
-    private static final long EXPECTED_AUTHOR_ID = 1L;
+    private static final String EXPECTED_AUTHOR_ID = "1";
 
     private static final String EXPECTED_AUTHOR_FULL_NAME = "Author_1";
 
-    private static final long EXPECTED_GENRE_ID = 1L;
+    private static final String EXPECTED_GENRE_ID = "1";
 
     private static final String EXPECTED_GENRE_NAME = "Genre_1";
 
@@ -59,7 +54,7 @@ class CommentServiceImplTest {
         expectedAuthor = new Author(EXPECTED_AUTHOR_ID, EXPECTED_AUTHOR_FULL_NAME);
         expectedGenre = new Genre(EXPECTED_GENRE_ID, EXPECTED_GENRE_NAME);
         expectedBook = new Book(EXPECTED_BOOK_ID, EXPECTED_BOOK_TITLE, expectedAuthor, expectedGenre);
-        expectedComment = new Comment(0, EXPECTED_COMMENT_TEXT, expectedBook);
+        expectedComment = new Comment(EXPECTED_COMMENT_TEXT, expectedBook);
     }
 
     @Test
@@ -89,8 +84,9 @@ class CommentServiceImplTest {
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void shouldCreateComment() {
         var newComment = commentService.insert(EXPECTED_COMMENT_TEXT, EXPECTED_BOOK_ID);
-        expectedComment.setId(EXPECTED_NEW_COMMENT_ID);
-        assertThat(newComment).usingRecursiveComparison().isEqualTo(expectedComment);
+        var expectedComment = commentService.findById(newComment.getId());
+        assertThat(expectedComment).isPresent();
+        assertThat(newComment).usingRecursiveComparison().isEqualTo(expectedComment.get());
     }
 
     @Test

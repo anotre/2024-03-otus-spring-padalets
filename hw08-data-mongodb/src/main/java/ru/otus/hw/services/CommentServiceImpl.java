@@ -2,7 +2,6 @@ package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.BookRepository;
@@ -19,40 +18,44 @@ public class CommentServiceImpl implements CommentService {
     private final BookRepository bookRepository;
 
     @Override
-    @Transactional(readOnly = true)
-    public Optional<Comment> findById(long id) {
+    public Optional<Comment> findById(String id) {
         return commentRepository.findById(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Comment> findByBookId(long id) {
+    public List<Comment> findByBookId(String id) {
         return commentRepository.findByBookId(id);
     }
 
     @Override
-    @Transactional
-    public Comment insert(String text, long bookId) {
-        return this.save(0, text, bookId);
+    public Comment insert(String text, String bookId) {
+        return this.save(text, bookId);
     }
 
     @Override
-    @Transactional
-    public Comment update(long id, String text, long bookId) {
+    public Comment update(String id, String text, String bookId) {
         return this.save(id, text, bookId);
     }
 
     @Override
-    @Transactional
-    public void deleteById(long id) {
+    public void deleteById(String id) {
         commentRepository.deleteById(id);
     }
 
-    private Comment save(long id, String text, long bookId) {
-        var book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(bookId)));
-        var comment = new Comment(id, text, book);
-
+    private Comment save(String id, String text, String bookId) {
+        var comment = this.createComment(text, bookId);
+        comment.setId(id);
         return commentRepository.save(comment);
+    }
+
+    private Comment save(String text, String bookId) {
+        var comment = this.createComment(text, bookId);
+        return commentRepository.save(comment);
+    }
+
+    private Comment createComment(String text, String bookId) {
+        var book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("Book with id %s not found".formatted(bookId)));
+        return new Comment(text, book);
     }
 }

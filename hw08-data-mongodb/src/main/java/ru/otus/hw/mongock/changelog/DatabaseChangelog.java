@@ -42,14 +42,9 @@ public class DatabaseChangelog {
             new Comment("Comment_3", books.get(2))
     );
 
-    @ChangeSet(order = "000", id = "dropDb", runAlways = true, author = MAIN_AUTHOR)
+    @ChangeSet(order = "001", id = "dropDb", runAlways = true, author = MAIN_AUTHOR)
     public void dropDb(MongoDatabase db) {
         db.drop();
-    }
-
-    @ChangeSet(order = "001", id = "createSequenceCollection", author = MAIN_AUTHOR)
-    public void createSequenceCollection(MongoDatabase db) {
-        db.createCollection("db_sequence");
     }
 
     @ChangeSet(order = "002", id = "insertGenres", author = MAIN_AUTHOR)

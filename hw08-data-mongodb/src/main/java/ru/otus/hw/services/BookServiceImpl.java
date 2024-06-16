@@ -2,7 +2,6 @@ package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.repositories.AuthorRepository;
@@ -22,41 +21,46 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     @Override
-    @Transactional(readOnly = true)
-    public Optional<Book> findById(long id) {
+    public Optional<Book> findById(String id) {
         return bookRepository.findById(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Book> findAll() {
         return bookRepository.findAll();
     }
 
     @Override
-    @Transactional
-    public Book insert(String title, long authorId, long genreId) {
-        return save(0, title, authorId, genreId);
+    public Book insert(String title, String authorId, String genreId) {
+        return save(title, authorId, genreId);
     }
 
     @Override
-    @Transactional
-    public Book update(long id, String title, long authorId, long genreId) {
+    public Book update(String id, String title, String authorId, String genreId) {
         return save(id, title, authorId, genreId);
     }
 
     @Override
-    @Transactional
-    public void deleteById(long id) {
+    public void deleteById(String id) {
         bookRepository.deleteById(id);
     }
 
-    private Book save(long id, String title, long authorId, long genreId) {
-        var author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(authorId)));
-        var genre = genreRepository.findById(genreId)
-                .orElseThrow(() -> new EntityNotFoundException("Genre with id %d not found".formatted(genreId)));
-        var book = new Book(id, title, author, genre);
+    private Book save(String id, String title, String authorId, String genreId) {
+        var book = this.createBook(title, authorId, genreId);
+        book.setId(id);
         return bookRepository.save(book);
+    }
+
+    private Book save(String title, String authorId, String genreId) {
+        var book = this.createBook(title, authorId, genreId);
+        return bookRepository.save(book);
+    }
+
+    private Book createBook(String title, String authorId, String genreId) {
+        var author = authorRepository.findById(authorId)
+                .orElseThrow(() -> new EntityNotFoundException("Author with id %s not found".formatted(authorId)));
+        var genre = genreRepository.findById(genreId)
+                .orElseThrow(() -> new EntityNotFoundException("Genre with id %s not found".formatted(genreId)));
+        return new Book(title, author, genre);
     }
 }

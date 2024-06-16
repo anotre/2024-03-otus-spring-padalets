@@ -13,7 +13,7 @@ import ru.otus.hw.models.prototype.Copyable;
 @NoArgsConstructor
 public class Genre implements Copyable<Genre> {
     @Id
-    private long id;
+    private String id;
 
     private String name;
 

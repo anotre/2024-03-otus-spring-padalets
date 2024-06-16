@@ -2,20 +2,20 @@ package ru.otus.hw.events;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
-import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
+import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
 import org.springframework.stereotype.Component;
 import ru.otus.hw.models.Book;
-import ru.otus.hw.services.SequenceGeneratorService;
+import ru.otus.hw.repositories.CommentRepository;
 
 @Component
 @RequiredArgsConstructor
 public class BookModelListener extends AbstractMongoEventListener<Book> {
-    private final SequenceGeneratorService sequenceGenerator;
+    private final CommentRepository commentRepository;
 
     @Override
-    public void onBeforeConvert(BeforeConvertEvent<Book> event) {
-        if (event.getSource().getId() <= 0) {
-            event.getSource().setId(sequenceGenerator.generateSequence(EntitySequenceNames.BOOK));
-        }
+    public void onBeforeDelete(BeforeDeleteEvent<Book> event) {
+        super.onBeforeDelete(event);
+        var bookId = event.getSource().get("_id").toString();
+        commentRepository.deleteByBookId(bookId);
     }
 }
