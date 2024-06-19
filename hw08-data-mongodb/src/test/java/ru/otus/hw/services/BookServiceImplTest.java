@@ -5,8 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
+import ru.otus.hw.events.BookModelListener;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -15,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
 @DisplayName("Сервис для работы с сущностями книг")
-@ComponentScan({"ru.otus.hw.repositories", "ru.otus.hw.services", "ru.otus.hw.events"})
+@Import({BookServiceImpl.class, BookModelListener.class})
 class BookServiceImplTest {
     private static final String EXPECTED_BOOK_ID = "1";
 
