@@ -1,9 +1,9 @@
-package ru.otus.hw.rest.dto.converter;
+package ru.otus.hw.controllers.dto.converter;
 
 import org.springframework.stereotype.Component;
 import ru.otus.hw.dto.converter.DtoConverter;
 import ru.otus.hw.models.Book;
-import ru.otus.hw.rest.dto.BookDto;
+import ru.otus.hw.controllers.dto.BookDto;
 
 @Component
 public class BookDtoConverter implements DtoConverter<Book, BookDto> {

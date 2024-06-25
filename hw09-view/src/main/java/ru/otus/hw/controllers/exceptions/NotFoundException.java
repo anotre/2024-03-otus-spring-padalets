@@ -1,4 +1,4 @@
-package ru.otus.hw.rest.exceptions;
+package ru.otus.hw.controllers.exceptions;
 
 import lombok.NoArgsConstructor;
 

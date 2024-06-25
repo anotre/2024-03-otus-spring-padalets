@@ -1,4 +1,4 @@
-package ru.otus.hw.rest.dto;
+package ru.otus.hw.controllers.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDto {
+public class GenreDto {
     private long id;
-    private String text;
-    private long bookId;
+    private String name;
 }

@@ -1,8 +1,8 @@
-package ru.otus.hw.rest.dto.converter;
+package ru.otus.hw.controllers.dto.converter;
 
 import org.springframework.stereotype.Component;
 import ru.otus.hw.models.Comment;
-import ru.otus.hw.rest.dto.CommentDto;
+import ru.otus.hw.controllers.dto.CommentDto;
 
 @Component
 public class CommentDtoConverter {
