@@ -52,7 +52,7 @@ public class BookController {
                 bookDto.getAuthorId(),
                 bookDto.getGenreId());
         model.addAttribute(model);
-        return "bookPage";
+        return "bookPage"; // после обновления следует возврат на страницу со списком
     }
 
     @DeleteMapping("/books/{id}")

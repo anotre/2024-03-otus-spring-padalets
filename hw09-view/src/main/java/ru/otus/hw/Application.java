@@ -11,5 +11,5 @@ public class Application {
 		System.out.printf("Чтобы перейти на страницу сайта открывай: %n%s%n",
 				"http://localhost:8080");
 	}
-
+// todo предусмотреть страницу с ошибкой - "not found"
 }

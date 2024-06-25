@@ -18,7 +18,7 @@ public class BookDtoConverter implements DtoConverter<Book, BookDto> {
     }
 
     @Override
-    public Book fromDto(BookDto bookDto) {
+    public Book toDomain(BookDto bookDto) {
         return new Book();
     }
 }

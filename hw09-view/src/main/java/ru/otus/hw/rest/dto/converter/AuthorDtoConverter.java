@@ -14,7 +14,7 @@ public class AuthorDtoConverter implements DtoConverter<Author, AuthorDto> {
     }
 
     @Override
-    public Author fromDto(AuthorDto authorDto) {
+    public Author toDomain(AuthorDto authorDto) {
         return new Author(authorDto.getId(), authorDto.getFullName());
     }
 }
