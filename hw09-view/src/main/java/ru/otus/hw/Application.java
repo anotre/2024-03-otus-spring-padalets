@@ -12,4 +12,5 @@ public class Application {
 				"http://localhost:8080");
 	}
 // todo предусмотреть страницу с ошибкой - "not found"
+	// todo нужно переделать все сервисы и тесты к ним, чтобы все сервисы (т.к. они @Transactional) возвращали DTO, а не сущности
 }

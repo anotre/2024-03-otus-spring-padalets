@@ -1,9 +1,11 @@
 package ru.otus.hw.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.hw.controllers.dto.BookDto;
 import ru.otus.hw.controllers.dto.converter.BookDtoConverter;
 import ru.otus.hw.controllers.exceptions.NotFoundException;
+import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
+import ru.otus.hw.services.GenreService;
 
 import java.util.stream.Collectors;
 
@@ -20,6 +24,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
+
+    private final AuthorService authorService;
+
+    private final GenreService genreService;
+
     private final BookDtoConverter bookDtoConverter;
 
     @GetMapping("/books")
@@ -28,6 +37,7 @@ public class BookController {
                 .map(bookDtoConverter::toDto)
                 .collect(Collectors.toList());
         model.addAttribute("books", books);
+
         return "books-list";
     }
 
@@ -35,36 +45,59 @@ public class BookController {
     public String book(@PathVariable("id") long id, Model model) {
         var book = bookService.findById(id).orElseThrow(NotFoundException::new);
         model.addAttribute("book", bookDtoConverter.toDto(book));
+
         return "book";
     }
 
     @PostMapping("/books")
     public String create(BookDto bookDto) {
-        bookService.insert(bookDto.getTitle(), bookDto.getAuthorId(), bookDto.getGenreId());
+        bookService.insert(
+                bookDto.getTitle(),
+                bookDto.getAuthor().getId(),
+                bookDto.getGenre().getId());
+
         return "redirect:/";
     }
 
-    @GetMapping(value = "/books", params = "id") // параметр запроса потому, что параметр пути должен быть точно, а параметр запроса опционален
-    public String edit(@RequestParam("id") long id, Model model) { // проблема с id, я думал что в случае чего там будет 0, но, видимо, исключение
-        var book = bookService.findById(id).orElseThrow(NotFoundException::new);
-        model.addAttribute("book", book);
+    @GetMapping("/books/create")
+    public String create(Model model) {
+        model.addAttribute("authors", authorService.findAll());
+        model.addAttribute("genres", genreService.findAll());
         return "edit";
     }
 
-    @PatchMapping("/books") // в шаблоне только один метод отправки формы, так что либо добавить один шаблон, либо убирать этот метод
+    @GetMapping(value = "/books/edit", params = "id")
+    // параметр запроса потому, что параметр пути должен быть точно, а параметр запроса опционален
+    public String edit(@RequestParam("id") long id, Model model) { // проблема с id, я думал что в случае чего там будет 0, но, видимо, исключение
+        var book = bookService.findById(id).orElseThrow(NotFoundException::new);
+        model.addAttribute("authors", authorService.findAll());
+        model.addAttribute("genres", genreService.findAll());
+        model.addAttribute("book", book);
+        return "edit-book";
+    }
+
+    @PatchMapping("/books")
+    // в шаблоне только один метод отправки формы, так что либо добавить один шаблон, либо убирать этот метод
     public String updateById(BookDto bookDto) {
         bookService.update(
                 bookDto.getId(),
                 bookDto.getTitle(),
-                bookDto.getAuthorId(),
-                bookDto.getGenreId());
-        return "redirect:/booksList";
+                bookDto.getAuthor().getId(),
+                bookDto.getGenre().getId());
+
+        return "redirect:/books-list";
     }
 
     @DeleteMapping("/books/{id}")
     public String deleteById(@PathVariable("id") long id) {
         bookService.deleteById(id);
         return "redirect:/";
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public String handleNotFound(NotFoundException ex) {
+        ResponseEntity.badRequest();
+        return "redirect:/not-found";
     }
 }
 

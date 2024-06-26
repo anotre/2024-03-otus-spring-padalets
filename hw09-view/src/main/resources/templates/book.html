@@ -8,42 +8,43 @@
             padding: 50px;
         }
 
-        .persons {
+        .book {
             border: 1px solid steelblue;
             width: 300px;
             border-collapse: collapse;
         }
 
-        .persons tr td, th {
+        .book tr td, th {
             padding: 5px;
             border: 1px solid steelblue;
         }
 
-        .persons td:last-child, td:first-child {
+        .book td:last-child, td:first-child {
             width: 50px;
         }
     </style>
 </head>
 <body>
-<h3>Persons:</h3>
+<h3 th:text="${book.title}">Book title</h3>
 
-<table class="persons">
+<table class="books">
     <thead>
     <tr>
-        <th>ID</th>
-        <th>Name</th>
+        <th>Title</th>
+        <th>Genre</th>
+        <th>Author</th>
         <th>Action</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="person : ${persons}">
-        <td th:text="${person.id}">1</td>
-        <td th:text="${person.name}">John Doe</td>
+    <tr th:object="${book}">
+        <td th:text="*{title}">John Doe</td>
         <td>
-            <a href="edit-book.html" th:href="@{/edit(id=${person.id})}">Edit</a>
+            <a href="edit-book.html" th:href="@{/edit(id=*{id})}">Edit</a>
         </td>
     </tr>
     </tbody>
 </table>
 </body>
 </html>
+<!--Нужна загрузка комментариев-->

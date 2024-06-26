@@ -1,15 +1,32 @@
 package ru.otus.hw.controllers.dto.converter;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.otus.hw.dto.converter.DtoConverter;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.controllers.dto.CommentDto;
 
 @Component
-public class CommentDtoConverter {
-    public CommentDto convert(Comment comment) {
+@RequiredArgsConstructor
+public class CommentDtoConverter implements DtoConverter {
+    private final BookDtoConverter bookDtoConverter;
+
+    public CommentDto toDto(Comment comment) {
+        var bookDto = bookDtoConverter.toDto(comment.getBook());
+
         return new CommentDto(
                 comment.getId(),
                 comment.getText(),
-                comment.getBook().getId());
+                bookDto);
+    }
+
+
+    public Comment toDomain(CommentDto commentDto) {
+        var book = bookDtoConverter.toDomain(commentDto.getBook());
+
+        return new Comment(
+                commentDto.getId(),
+                commentDto.getText(),
+                book);
     }
 }
