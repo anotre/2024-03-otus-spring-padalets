@@ -28,14 +28,9 @@ public class BookController {
     private final AuthorService authorService;
 
     private final GenreService genreService;
-
-    private final BookDtoConverter bookDtoConverter;
-
     @GetMapping("/books")
     public String booksList(Model model) {
-        var books = bookService.findAll().stream()
-                .map(bookDtoConverter::toDto)
-                .collect(Collectors.toList());
+        var books = bookService.findAll();
         model.addAttribute("books", books);
 
         return "books-list";
@@ -44,7 +39,7 @@ public class BookController {
     @GetMapping("/books/{id}")
     public String book(@PathVariable("id") long id, Model model) {
         var book = bookService.findById(id).orElseThrow(NotFoundException::new);
-        model.addAttribute("book", bookDtoConverter.toDto(book));
+        model.addAttribute("book", book);
 
         return "book";
     }
@@ -63,7 +58,7 @@ public class BookController {
     public String create(Model model) {
         model.addAttribute("authors", authorService.findAll());
         model.addAttribute("genres", genreService.findAll());
-        return "edit";
+        return "edit-book";
     }
 
     @GetMapping(value = "/books/edit", params = "id")

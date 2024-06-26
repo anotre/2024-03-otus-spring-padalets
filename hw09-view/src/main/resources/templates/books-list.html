@@ -40,7 +40,7 @@
     <tbody>
     <tr th:each="book : ${books}" th:object="${book}">
         <td th:text="*{id}">1</td>
-        <td><a th:text="*{title}" th:href="/books/*{id}">John Doe</a></td>
+        <td><a th:text="*{title}" th:href="@{/books/__*{id}__}">John Doe</a></td>
         <td th:text="*{genre.name}">John Doe</td>
         <td th:text="*{author.fullName}">John Doe</td>
         <td>

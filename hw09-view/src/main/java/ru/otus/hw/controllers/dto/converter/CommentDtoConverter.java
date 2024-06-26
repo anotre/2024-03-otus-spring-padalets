@@ -8,9 +8,10 @@ import ru.otus.hw.controllers.dto.CommentDto;
 
 @Component
 @RequiredArgsConstructor
-public class CommentDtoConverter implements DtoConverter {
+public class CommentDtoConverter implements DtoConverter<Comment, CommentDto> {
     private final BookDtoConverter bookDtoConverter;
 
+    @Override
     public CommentDto toDto(Comment comment) {
         var bookDto = bookDtoConverter.toDto(comment.getBook());
 
@@ -20,7 +21,7 @@ public class CommentDtoConverter implements DtoConverter {
                 bookDto);
     }
 
-
+    @Override
     public Comment toDomain(CommentDto commentDto) {
         var book = bookDtoConverter.toDomain(commentDto.getBook());
 

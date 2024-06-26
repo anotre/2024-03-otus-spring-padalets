@@ -39,12 +39,15 @@
     <tbody>
     <tr th:object="${book}">
         <td th:text="*{title}">John Doe</td>
+        <td th:text="*{author.fullName}">Author</td>
+        <td th:text="*{genre.name}">Genre</td>
         <td>
             <a href="edit-book.html" th:href="@{/edit(id=*{id})}">Edit</a>
         </td>
     </tr>
     </tbody>
 </table>
+<a href="javascript:history.back()">Вернуться назад</a>
 </body>
 </html>
 <!--Нужна загрузка комментариев-->
