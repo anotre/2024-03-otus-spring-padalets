@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.hw.controllers.dto.BookDto;
+import ru.otus.hw.controllers.dto.BookViewDto;
 import ru.otus.hw.controllers.dto.converter.BookDtoConverter;
 import ru.otus.hw.controllers.exceptions.NotFoundException;
 import ru.otus.hw.services.AuthorService;
@@ -52,7 +53,6 @@ public class BookController {
     }
 
     @GetMapping(value = "/books/edit", params = "id")
-    // параметр запроса потому, что параметр пути должен быть точно, а параметр запроса опционален
     public String edit(@RequestParam("id") long id, Model model) { // проблема с id, я думал что в случае чего там будет 0, но, видимо, исключение
         var book = bookService.findById(id).orElseThrow(NotFoundException::new);
         model.addAttribute("authors", authorService.findAll());
@@ -61,24 +61,23 @@ public class BookController {
         return "edit-book";
     }
 
-    @PostMapping("/books")
-    public String create(BookDto bookDto) {
+    @PostMapping("/books/create")
+    public String create(BookViewDto bookViewDto) {
         bookService.insert(
-                bookDto.getTitle(),
-                bookDto.getAuthor().getId(),
-                bookDto.getGenre().getId());
+                bookViewDto.getTitle(),
+                bookViewDto.getAuthorId(),
+                bookViewDto.getGenreId());
 
         return "redirect:/";
     }
 
-    @PatchMapping("/books")
-    public String updateById(BookDto bookDto) {
+    @PostMapping("/books/edit")
+    public String updateById(BookViewDto bookViewDto) {
         bookService.update(
-                bookDto.getId(),
-                bookDto.getTitle(),
-                bookDto.getAuthor().getId(),
-                bookDto.getGenre().getId());
-
+                bookViewDto.getId(),
+                bookViewDto.getTitle(),
+                bookViewDto.getAuthorId(),
+                bookViewDto.getGenreId());
         return "redirect:/books-list";
     }
 

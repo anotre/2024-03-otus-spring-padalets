@@ -27,7 +27,7 @@
         <td th:text="*{author.fullName}">Author</td>
         <td th:text="*{genre.name}">Genre</td>
         <td>
-            <a href="edit-book.html" th:href="@{/edit(id=*{id})}">Edit</a>
+            <a href="edit-book.html" th:href="@{/books/edit(id=*{id})}">Edit</a>
         </td>
     </tr>
     </tbody>

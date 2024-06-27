@@ -12,7 +12,7 @@
 <body>
 <h3>Book edit form</h3>
 
-<form id="book-edit-form" th:action="@{/books/edit}" th:method="patch" action="/books/edit-book.html">
+<form id="book-edit-form" th:action="@{/books/edit}" th:method="post" action="/books/edit-book.html">
     <table class="edit-form">
         <thead>
         <tr>
@@ -23,13 +23,16 @@
         </thead>
         <tbody>
         <tr th:object="${book}">
-            <td><input
+            <td>
+                <input type="hidden" readonly th:value="*{id}" name="id">
+                <input
                     name="title"
                     type="text"
                     th:value="*{title}"
                     value=""
                     th:placeholder="Title2"
-                    placeholder="Title"></td>
+                    placeholder="Title">
+            </td>
             <td>
                 <select name="authorId" id="authorId">
                     <option value="" disabled>Author name</option>
