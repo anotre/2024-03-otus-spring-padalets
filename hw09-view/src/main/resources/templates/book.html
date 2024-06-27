@@ -7,21 +7,6 @@
         body {
             padding: 50px;
         }
-
-        .book {
-            border: 1px solid steelblue;
-            width: 300px;
-            border-collapse: collapse;
-        }
-
-        .book tr td, th {
-            padding: 5px;
-            border: 1px solid steelblue;
-        }
-
-        .book td:last-child, td:first-child {
-            width: 50px;
-        }
     </style>
 </head>
 <body>
@@ -37,7 +22,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:object="${book}">
+    <tr class="book" th:object="${book}">
         <td th:text="*{title}">John Doe</td>
         <td th:text="*{author.fullName}">Author</td>
         <td th:text="*{genre.name}">Genre</td>
@@ -48,6 +33,7 @@
     </tbody>
 </table>
 <a href="javascript:history.back()">Вернуться назад</a>
+<a href="/">Back to index</a>
 </body>
 </html>
 <!--Нужна загрузка комментариев-->

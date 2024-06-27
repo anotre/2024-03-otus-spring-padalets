@@ -40,25 +40,15 @@ public class BookController {
     public String book(@PathVariable("id") long id, Model model) {
         var book = bookService.findById(id).orElseThrow(NotFoundException::new);
         model.addAttribute("book", book);
-
+        // todo добавить отображение комментариев.
         return "book";
-    }
-
-    @PostMapping("/books")
-    public String create(BookDto bookDto) {
-        bookService.insert(
-                bookDto.getTitle(),
-                bookDto.getAuthor().getId(),
-                bookDto.getGenre().getId());
-
-        return "redirect:/";
     }
 
     @GetMapping("/books/create")
     public String create(Model model) {
         model.addAttribute("authors", authorService.findAll());
         model.addAttribute("genres", genreService.findAll());
-        return "edit-book";
+        return "create-book";
     }
 
     @GetMapping(value = "/books/edit", params = "id")
@@ -71,8 +61,17 @@ public class BookController {
         return "edit-book";
     }
 
+    @PostMapping("/books")
+    public String create(BookDto bookDto) {
+        bookService.insert(
+                bookDto.getTitle(),
+                bookDto.getAuthor().getId(),
+                bookDto.getGenre().getId());
+
+        return "redirect:/";
+    }
+
     @PatchMapping("/books")
-    // в шаблоне только один метод отправки формы, так что либо добавить один шаблон, либо убирать этот метод
     public String updateById(BookDto bookDto) {
         bookService.update(
                 bookDto.getId(),

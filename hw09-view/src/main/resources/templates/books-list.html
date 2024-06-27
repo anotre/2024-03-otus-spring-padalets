@@ -7,47 +7,34 @@
         body {
             padding: 50px;
         }
-
-        .books {
-            border: 1px solid steelblue;
-            width: 300px;
-            border-collapse: collapse;
-        }
-
-        .books tr td, th {
-            padding: 5px;
-            border: 1px solid steelblue;
-        }
-
-        .books td:last-child, td:first-child {
-            width: 50px;
-        }
     </style>
 </head>
 <body>
-<h3>Books:</h3>
+    <h3>Books:</h3>
 
-<table class="books">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Genre</th>
-        <th>Author</th>
-        <th>actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="book : ${books}" th:object="${book}">
-        <td th:text="*{id}">1</td>
-        <td><a th:text="*{title}" th:href="@{/books/__*{id}__}">John Doe</a></td>
-        <td th:text="*{genre.name}">John Doe</td>
-        <td th:text="*{author.fullName}">John Doe</td>
-        <td>
-            <a href="books/edit" th:href="@{books/edit(id=*{id})}">Edit</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <table class="books">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Genre</th>
+                <th>Author</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="book : ${books}" th:object="${book}">
+                <td th:text="*{id}">1</td>
+                <td><a th:text="*{title}" th:href="@{/books/__*{id}__}">John Doe</a></td>
+                <td th:text="*{genre.name}">John Doe</td>
+                <td th:text="*{author.fullName}">John Doe</td>
+                <td>
+                    <a href="books/edit" th:href="@{books/edit(id=*{id})}">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/books/create">Create new book</a>
+    <a href="/">Back to index</a>
 </body>
 </html>

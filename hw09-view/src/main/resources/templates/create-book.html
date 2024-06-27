@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Book editing form</title>
+    <title>Book creation form</title>
     <style type="text/css">
         body {
             padding: 50px;
@@ -12,7 +12,7 @@
 <body>
 <h3>Book edit form</h3>
 
-<form id="book-edit-form" th:action="@{/books/edit}" th:method="patch" action="/books/edit-book.html">
+<form id="book-edit-form" th:action="@{/books/create}" th:method="post" action="/books/create-book.html">
     <table class="edit-form">
         <thead>
         <tr>
@@ -22,14 +22,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:object="${book}">
+        <tr>
             <td><input
                     name="title"
                     type="text"
-                    th:value="*{title}"
                     value=""
-                    th:placeholder="Title2"
-                    placeholder="Title"></td>
+                    placeholder="Title"
+                    th:placeholder="Title2"></td>
             <td>
                 <select name="authorId" id="authorId">
                     <option value="" disabled>Author name</option>
@@ -38,8 +37,7 @@
                             th:object="${author}"
                             value=""
                             th:value="*{id}"
-                            th:text="*{fullName}"
-                            th:selected="${book.author.id} == *{id}"></option>
+                            th:text="*{fullName}"></option>
                 </select>
             </td>
             <td>
@@ -50,8 +48,7 @@
                             th:object="${genre}"
                             value=""
                             th:value="*{id}"
-                            th:text="*{name}"
-                            th:selected="${book.genre.id} == *{id}"></option>
+                            th:text="*{name}"></option>
                 </select>
             </td>
         </tr>
@@ -60,6 +57,7 @@
     <button type="submit">Save</button>
     <input type="reset" th:value="Reset">
 </form>
+
 <!--<a href="javascript:history.back()">Back</a>-->
 <a href="books-list.html" th:href="@{/books}" th:text="Back">Back to list</a>
 <a href="/">Back to index</a>
