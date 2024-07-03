@@ -3,6 +3,8 @@ package ru.otus.hw.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.controllers.dto.CommentDto;
+import ru.otus.hw.controllers.dto.converter.CommentDtoConverter;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.BookRepository;
@@ -18,28 +20,33 @@ public class CommentServiceImpl implements CommentService {
 
     private final BookRepository bookRepository;
 
+    private final CommentDtoConverter converter;
+
     @Override
     @Transactional(readOnly = true)
-    public Optional<Comment> findById(long id) {
-        return commentRepository.findById(id);
+    public Optional<CommentDto> findById(long id) {
+        return commentRepository.findById(id).map(converter::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Comment> findByBookId(long id) {
-        return commentRepository.findByBookId(id);
+    public List<CommentDto> findByBookId(long id) {
+        return commentRepository.findByBookId(id).stream()
+                .map(converter::toDto).toList();
     }
 
     @Override
     @Transactional
-    public Comment insert(String text, long bookId) {
-        return this.save(0, text, bookId);
+    public CommentDto insert(String text, long bookId) {
+        var comment = this.save(0, text, bookId);
+        return converter.toDto(comment);
     }
 
     @Override
     @Transactional
-    public Comment update(long id, String text, long bookId) {
-        return this.save(id, text, bookId);
+    public CommentDto update(long id, String text, long bookId) {
+        var comment = this.save(id, text, bookId);
+        return converter.toDto(comment);
     }
 
     @Override

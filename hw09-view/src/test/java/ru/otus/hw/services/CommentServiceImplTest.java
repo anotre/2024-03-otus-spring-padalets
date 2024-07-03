@@ -9,16 +9,16 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.models.Author;
-import ru.otus.hw.models.Book;
-import ru.otus.hw.models.Comment;
-import ru.otus.hw.models.Genre;
+import ru.otus.hw.controllers.dto.AuthorDto;
+import ru.otus.hw.controllers.dto.BookDto;
+import ru.otus.hw.controllers.dto.CommentDto;
+import ru.otus.hw.controllers.dto.GenreDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayName("Сервис для работы с сущностями комментариев")
-@ComponentScan({"ru.otus.hw.repositories", "ru.otus.hw.services"})
+@ComponentScan({"ru.otus.hw.repositories", "ru.otus.hw.services", "ru.otus.hw.controllers.dto"})
 @Transactional(propagation = Propagation.NEVER)
 class CommentServiceImplTest {
     private static final long EXPECTED_COMMENT_ID = 1L;
@@ -43,64 +43,65 @@ class CommentServiceImplTest {
 
     private static final String EXPECTED_GENRE_NAME = "Genre_1";
 
-    private Genre expectedGenre;
+    private GenreDto expectedGenreDto;
 
-    private Author expectedAuthor;
+    private AuthorDto expectedAuthorDto;
 
-    private Book expectedBook;
+    private BookDto expectedBookDto;
 
-    private Comment expectedComment;
+    private CommentDto expectedCommentDto;
 
     @Autowired
     private CommentService commentService;
 
     @BeforeEach
     void setUp() {
-        expectedAuthor = new Author(EXPECTED_AUTHOR_ID, EXPECTED_AUTHOR_FULL_NAME);
-        expectedGenre = new Genre(EXPECTED_GENRE_ID, EXPECTED_GENRE_NAME);
-        expectedBook = new Book(EXPECTED_BOOK_ID, EXPECTED_BOOK_TITLE, expectedAuthor, expectedGenre);
-        expectedComment = new Comment(0, EXPECTED_COMMENT_TEXT, expectedBook);
+        expectedAuthorDto = new AuthorDto(EXPECTED_AUTHOR_ID, EXPECTED_AUTHOR_FULL_NAME);
+
+        expectedGenreDto = new GenreDto(EXPECTED_GENRE_ID, EXPECTED_GENRE_NAME);
+        expectedBookDto = new BookDto(EXPECTED_BOOK_ID, EXPECTED_BOOK_TITLE, expectedAuthorDto, expectedGenreDto);
+        expectedCommentDto = new CommentDto(0, EXPECTED_COMMENT_TEXT, expectedBookDto);
     }
 
     @Test
     @DisplayName("Загружает ожидаемый комментарий по идентификатору")
     void shouldFindExpectedCommentById() {
-        var actualComment = commentService.findById(EXPECTED_COMMENT_ID);
-        expectedComment.setId(EXPECTED_COMMENT_ID);
-        assertThat(actualComment)
+        var actualCommentDto = commentService.findById(EXPECTED_COMMENT_ID);
+        expectedCommentDto.setId(EXPECTED_COMMENT_ID);
+        assertThat(actualCommentDto)
                 .isPresent()
                 .get().usingRecursiveComparison()
                 .ignoringFields("book")
-                .isEqualTo(expectedComment);
+                .isEqualTo(expectedCommentDto);
     }
 
     @Test
     @DisplayName("Загружает список комментариев по идентификатору книги")
     void shouldFindExpectedCommentListByBookId() {
-        var actualComments = commentService.findByBookId(EXPECTED_BOOK_ID);
-        expectedComment.setId(EXPECTED_COMMENT_ID);
-        assertThat(actualComments)
+        var actualCommentsDto = commentService.findByBookId(EXPECTED_BOOK_ID);
+        expectedCommentDto.setId(EXPECTED_COMMENT_ID);
+        assertThat(actualCommentsDto)
                 .hasSize(EXPECTED_NUMBER_OF_COMMENTS_BY_BOOK_ID)
-                .containsExactlyInAnyOrder(expectedComment);
+                .containsExactlyInAnyOrder(expectedCommentDto);
     }
 
     @Test
     @DisplayName("Сохраняет новый комментарий")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void shouldCreateComment() {
-        var newComment = commentService.insert(EXPECTED_COMMENT_TEXT, EXPECTED_BOOK_ID);
-        expectedComment.setId(EXPECTED_NEW_COMMENT_ID);
-        assertThat(newComment).usingRecursiveComparison().isEqualTo(expectedComment);
+        var newCommentDto = commentService.insert(EXPECTED_COMMENT_TEXT, EXPECTED_BOOK_ID);
+        expectedCommentDto.setId(EXPECTED_NEW_COMMENT_ID);
+        assertThat(newCommentDto).usingRecursiveComparison().isEqualTo(expectedCommentDto);
     }
 
     @Test
     @DisplayName("Обновляет существующий комментарий")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void shouldChangeExistingComment() {
-        var updatedComment = commentService.update(EXPECTED_COMMENT_ID, EXPECTED_UPDATED_COMMENT_TEXT, EXPECTED_BOOK_ID);
-        expectedComment.setId(EXPECTED_COMMENT_ID);
-        expectedComment.setText(EXPECTED_UPDATED_COMMENT_TEXT);
-        assertThat(updatedComment).usingRecursiveComparison().isEqualTo(expectedComment);
+        var updatedCommentDto = commentService.update(EXPECTED_COMMENT_ID, EXPECTED_UPDATED_COMMENT_TEXT, EXPECTED_BOOK_ID);
+        expectedCommentDto.setId(EXPECTED_COMMENT_ID);
+        expectedCommentDto.setText(EXPECTED_UPDATED_COMMENT_TEXT);
+        assertThat(updatedCommentDto).usingRecursiveComparison().isEqualTo(expectedCommentDto);
     }
 
     @Test

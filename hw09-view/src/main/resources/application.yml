@@ -16,3 +16,5 @@ spring:
     locations:
       - "classpath:db/migration/data"
       - "classpath:db/migration/scheme"
+  messages:
+    encoding: UTF-8

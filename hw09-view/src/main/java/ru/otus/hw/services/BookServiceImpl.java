@@ -3,6 +3,8 @@ package ru.otus.hw.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.controllers.dto.BookDto;
+import ru.otus.hw.controllers.dto.converter.BookDtoConverter;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.repositories.AuthorRepository;
@@ -21,28 +23,32 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
 
+    private final BookDtoConverter bookDtoConverter;
+
     @Override
     @Transactional(readOnly = true)
-    public Optional<Book> findById(long id) {
-        return bookRepository.findById(id);
+    public Optional<BookDto> findById(long id) {
+        return bookRepository.findById(id).map(bookDtoConverter::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Book> findAll() {
-        return bookRepository.findAll();
+    public List<BookDto> findAll() {
+        return bookRepository.findAll().stream().map(bookDtoConverter::toDto).toList();
     }
 
     @Override
     @Transactional
-    public Book insert(String title, long authorId, long genreId) {
-        return save(0, title, authorId, genreId);
+    public BookDto insert(String title, long authorId, long genreId) {
+        var book = save(0, title, authorId, genreId);
+        return bookDtoConverter.toDto(book);
     }
 
     @Override
     @Transactional
-    public Book update(long id, String title, long authorId, long genreId) {
-        return save(id, title, authorId, genreId);
+    public BookDto update(long id, String title, long authorId, long genreId) {
+        var book = save(id, title, authorId, genreId);
+        return bookDtoConverter.toDto(book);
     }
 
     @Override
@@ -57,6 +63,7 @@ public class BookServiceImpl implements BookService {
         var genre = genreRepository.findById(genreId)
                 .orElseThrow(() -> new EntityNotFoundException("Genre with id %d not found".formatted(genreId)));
         var book = new Book(id, title, author, genre);
+
         return bookRepository.save(book);
     }
 }
