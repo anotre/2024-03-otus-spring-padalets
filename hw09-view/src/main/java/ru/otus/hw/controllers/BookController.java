@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.otus.hw.controllers.dto.BookDto;
 import ru.otus.hw.controllers.exceptions.NotFoundException;
@@ -58,8 +57,8 @@ public class BookController {
         return "create-book";
     }
 
-    @GetMapping(value = "/books/edit", params = "id")
-    public String edit(@RequestParam("id") long id, Model model) {
+    @GetMapping(value = "/books/edit/{id}")
+    public String edit(@PathVariable("id") long id, Model model) {
         var book = bookService.findById(id).orElseThrow(NotFoundException::new);
         model.addAttribute("authors", authorService.findAll());
         model.addAttribute("genres", genreService.findAll());
@@ -101,9 +100,8 @@ public class BookController {
         return "redirect:/books";
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/books/delete{id}", params = "id")
-    public String deleteById(@RequestParam("id") long id) {
+    @PostMapping("/books/delete/{id}")
+    public String deleteById(@PathVariable("id") long id) {
         bookService.deleteById(id);
         return "redirect:/books";
     }

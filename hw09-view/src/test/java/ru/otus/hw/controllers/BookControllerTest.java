@@ -129,7 +129,7 @@ class BookControllerTest {
         given(authorService.findAll()).willReturn(Collections.emptyList());
         given(genreService.findAll()).willReturn(Collections.emptyList());
 
-        mockMvc.perform(get(EDIT_URL).param("id", String.valueOf(bookDto.getId())))
+        mockMvc.perform(get(String.format("%s/%d", EDIT_URL, bookDto.getId())))
                 .andExpect(status().isOk())
                 .andExpect(view().name(EDIT_VIEW))
                 .andExpect(model().attributeExists("authors", "genres", "bookDto"))
@@ -228,8 +228,8 @@ class BookControllerTest {
     @Test
     @DisplayName("Удаляет книгу и перенаправляет на список всех книг")
     void shouldDeleteById() throws Exception {
-        mockMvc.perform(get(DELETE_URL).param("id", String.valueOf(EXPECTED_BOOK_ID)))
-                .andExpect(status().isOk())
+        mockMvc.perform(post(String.format("%s/%d", DELETE_URL, EXPECTED_BOOK_ID)))
+                .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(BOOKS_LIST_URL));
 
         verify(bookService, times(1)).deleteById(EXPECTED_BOOK_ID);

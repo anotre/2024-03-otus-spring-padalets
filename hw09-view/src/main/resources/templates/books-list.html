@@ -29,9 +29,11 @@
                 <td th:text="*{author.fullName}">author name</td>
                 <td th:text="*{genre.name}">genre</td>
                 <td>
-                    <a href="books/edit" th:href="@{books/edit(id=*{id})}" th:text="#{edit-link-caption}">Edit</a>
+                    <a href="books/edit" th:href="@{books/edit/__*{id}__}" th:text="#{edit-link-caption}">Edit</a>
                     </br>
-                    <a href="/books/delete" th:href="@{books/delete(id=*{id})}" th:text="#{delete-link-caption}">Delete</a>
+                    <form method="post" action="/books/delete" th:action="@{/books/delete/__*{id}__}">
+                        <input type="submit" value="Delete" th:value="#{delete-link-caption}">
+                    </form>
                 </td>
             </tr>
         </tbody>
