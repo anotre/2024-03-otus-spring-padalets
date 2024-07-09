@@ -7,6 +7,6 @@ export class CommentDao {
     });
   }
   async getAllCommentsByBookId(id) {
-    return this.fetch.get("/comments", { params: { bookId: id } });
+    return this.fetch.get(`/comments/book/${id}`);
   }
 }
