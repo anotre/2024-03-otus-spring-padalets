@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.hw.controllers.dto.CommentDto;
 import ru.otus.hw.services.CommentService;
@@ -22,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(CommentController.class)
 @DisplayName("REST controller for comments")
-@Import({CommentController.class})
 class CommentControllerTest {
     private static final long BOOK_ID = 1L;
 

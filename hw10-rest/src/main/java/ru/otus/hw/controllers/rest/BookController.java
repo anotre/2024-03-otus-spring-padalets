@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.otus.hw.controllers.dto.BookDto;
 import ru.otus.hw.controllers.exceptions.NotFoundException;
-import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
-import ru.otus.hw.services.GenreService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +27,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
-
-    private final AuthorService authorService;
-
-    private final GenreService genreService;
 
     @GetMapping("/api/v1/books")
     public List<BookDto> getAllBooks() {
