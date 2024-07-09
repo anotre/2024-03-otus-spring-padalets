@@ -41,7 +41,7 @@ class CommentControllerTest {
                 new CommentDto(2L, "Comment_1", null)
         );
         given(commentService.findByBookId(BOOK_ID)).willReturn(expectedComments);
-        mockMvc.perform(get("/api/v1/comments").param("bookId", String.valueOf(BOOK_ID)))
+        mockMvc.perform(get(String.format("/api/v1/comments/book/%d", BOOK_ID)).param("bookId", String.valueOf(BOOK_ID)))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(expectedComments)));
 
