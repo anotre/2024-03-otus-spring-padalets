@@ -10,6 +10,7 @@ import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
+import ru.otus.hw.repositories.CommentRepository;
 import ru.otus.hw.repositories.GenreRepository;
 
 @RequiredArgsConstructor
@@ -20,6 +21,8 @@ public class BookServiceImpl implements BookService {
     private final GenreRepository genreRepository;
 
     private final BookRepository bookRepository;
+
+    private final CommentRepository commentRepository;
 
     private final BookDtoConverter bookDtoConverter;
 
@@ -51,8 +54,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteById(String id) {
-        bookRepository.deleteById(id).subscribe();
+    public Mono<Void> deleteById(String id) {
+        return bookRepository.deleteById(id).doOnNext(unused -> System.out.println("==========deleteById============="))
+                .and(commentRepository.deleteByBookId(id));
     }
 
     private Mono<Book> prepareBook(String title, String authorId, String genreId) {

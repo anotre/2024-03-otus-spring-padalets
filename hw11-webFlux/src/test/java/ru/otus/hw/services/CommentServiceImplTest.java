@@ -1,6 +1,6 @@
 package ru.otus.hw.services;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +46,17 @@ class CommentServiceImplTest {
     @Test
     @DisplayName("Загружает ожидаемый комментарий по идентификатору")
     void shouldFindExpectedCommentById() {
+
         var expectedComment = commentRepository
                 .findById(EXPECTED_COMMENT_ID)
-                .map(commentDtoConverter::toDto)
-                .block();
+                .map(commentDtoConverter::toDto);
 
-        StepVerifier.create(commentService.findById(EXPECTED_COMMENT_ID))
-                .expectNext(expectedComment)
+        var actualComment = commentService.findById(EXPECTED_COMMENT_ID);
+
+        StepVerifier.create(Flux.zip(actualComment, expectedComment))
+                .assertNext(
+                        tuple -> Assertions.assertThat(tuple.getT1()).isEqualTo(tuple.getT2())
+                )
                 .expectComplete()
                 .verify();
     }
@@ -109,7 +113,9 @@ class CommentServiceImplTest {
     void shouldDeleteCommentById() {
         var expectedEmptyComment = commentRepository
                 .findById(EXPECTED_COMMENT_ID)
-                .doOnNext(comment -> commentService.deleteById(comment.getId()))
+                .flatMap(comment -> commentService
+                        .deleteById(comment.getId())
+                        .thenReturn(comment))
                 .flatMap(comment -> commentRepository.findById(comment.getId()));
 
         StepVerifier

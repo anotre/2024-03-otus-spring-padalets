@@ -11,9 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import ru.otus.hw.controllers.dto.GenreDto;
-import ru.otus.hw.controllers.dto.converter.GenreDtoConverter;
-import ru.otus.hw.models.Genre;
-import ru.otus.hw.repositories.GenreRepository;
 import ru.otus.hw.services.GenreService;
 
 import java.util.List;
@@ -30,22 +27,14 @@ class GenreControllerTest {
     @MockBean
     private GenreService genreService;
 
-    @Autowired
-    private GenreRepository genreRepository;
-
-    @Autowired
-    private GenreDtoConverter genreDtoConverter;
-
     private List<GenreDto> expectedGenres;
 
     @BeforeEach
     void setUp() {
-        this.expectedGenres = Flux.fromIterable(List.of(
-                        new Genre("Genre_1"),
-                        new Genre("Genre_2")
-                ))
-                .flatMap(genreRepository::insert)
-                .map(genreDtoConverter::toDto).collectList().block();
+        this.expectedGenres = List.of(
+                new GenreDto("Genre_1_Id", "Genre_1"),
+                new GenreDto("Genre_2_Id", "Genre_2")
+        );
     }
 
     @Test

@@ -1,5 +1,6 @@
 package ru.otus.hw.services;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 import ru.otus.hw.controllers.dto.converter.BookDtoConverter;
-import ru.otus.hw.events.BookModelListener;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;
 
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @DisplayName("Сервис для работы с сущностями книг")
-@Import({BookServiceImpl.class, BookModelListener.class})
+@Import({BookServiceImpl.class})
 class BookServiceImplTest {
     private static final String EXPECTED_BOOK_ID = "testBookId";
 
@@ -46,13 +46,15 @@ class BookServiceImplTest {
     void shouldFindBookById() {
         var expectedBook = bookRepository
                 .findById(EXPECTED_BOOK_ID)
-                .map(book -> bookDtoConverter.toDto(book)).block();
+                .map(book -> bookDtoConverter.toDto(book));
 
         var actualBook = bookService.findById(EXPECTED_BOOK_ID);
 
         StepVerifier
-                .create(actualBook)
-                .expectNext(expectedBook)
+                .create(Flux.zip(actualBook, expectedBook))
+                .assertNext(
+                        tuple -> Assertions.assertThat(tuple.getT1()).isEqualTo(tuple.getT2())
+                )
                 .expectComplete()
                 .verify();
     }
@@ -116,7 +118,9 @@ class BookServiceImplTest {
     void shouldDeleteExistingBookById() {
         var expectedEmptyBook = bookRepository
                 .findById(EXPECTED_BOOK_ID)
-                .doOnNext(book -> bookService.deleteById(book.getId()))
+                .flatMap(book -> bookService
+                        .deleteById(book.getId())
+                        .thenReturn(book))
                 .flatMap(book -> bookRepository.findById(book.getId()));
 
         StepVerifier

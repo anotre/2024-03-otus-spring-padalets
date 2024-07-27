@@ -13,5 +13,5 @@ public interface BookService {
 
     Mono<BookDto> update(String id, String title, String authorId, String genreId);
 
-    void deleteById(String id);
+    Mono<Void> deleteById(String id);
 }

@@ -15,8 +15,6 @@ import reactor.core.publisher.Mono;
 import ru.otus.hw.controllers.dto.AuthorDto;
 import ru.otus.hw.controllers.dto.BookDto;
 import ru.otus.hw.controllers.dto.GenreDto;
-import ru.otus.hw.controllers.dto.converter.BookDtoConverter;
-import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.services.BookServiceImpl;
 
 import java.util.HashMap;
@@ -32,12 +30,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 class BookControllerTest {
     @Autowired
     private WebTestClient webTestClient;
-
-    @Autowired
-    private BookDtoConverter bookDtoConverter;
-
-    @Autowired
-    private BookRepository bookRepository;
 
     @MockBean
     private BookServiceImpl bookService;

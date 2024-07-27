@@ -48,8 +48,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteById(String id) {
-        commentRepository.deleteById(id).subscribe();
+    public Mono<Void> deleteById(String id) {
+        return commentRepository.deleteById(id);
     }
 
     private Mono<Comment> prepareComment(String text, String bookId) {

@@ -65,8 +65,8 @@ public class BookController {
 
     @DeleteMapping("/api/v1/books/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBook(@PathVariable String id) {
-        bookService.deleteById(id);
+    public Mono<Void> deleteBook(@PathVariable String id) {
+        return bookService.deleteById(id);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

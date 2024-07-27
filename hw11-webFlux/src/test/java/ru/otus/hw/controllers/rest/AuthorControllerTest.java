@@ -11,9 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import ru.otus.hw.controllers.dto.AuthorDto;
-import ru.otus.hw.controllers.dto.converter.AuthorDtoConverter;
-import ru.otus.hw.models.Author;
-import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.services.AuthorService;
 
 import java.util.List;
@@ -30,22 +27,14 @@ class AuthorControllerTest {
     @MockBean
     private AuthorService authorService;
 
-    @Autowired
-    private AuthorRepository authorRepository;
-
-    @Autowired
-    private AuthorDtoConverter authorDtoConverter;
-
     private List<AuthorDto> expectedAuthors;
 
     @BeforeEach
     void setUp() {
-        this.expectedAuthors = Flux.fromIterable(List.of(
-                        new Author("Author_1"),
-                        new Author("Author_2")
-                ))
-                .flatMap(authorRepository::insert)
-                .map(authorDtoConverter::toDto).collectList().block();
+        this.expectedAuthors = List.of(
+                new AuthorDto("Author_1_Id", "Author_1"),
+                new AuthorDto("Author_2_Id", "Author_2")
+        );
     }
 
     @Test
