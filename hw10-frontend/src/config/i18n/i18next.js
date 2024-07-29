@@ -2,9 +2,9 @@ import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 
 i18next.use(initReactI18next).init({
-  lng: "ru_RU",
+  lng: "ru",
   resources: {
-    ru_RU: {
+    ru: {
       translation: {
         control: {
           form: {
@@ -19,8 +19,8 @@ i18next.use(initReactI18next).init({
             main: "Главная",
           },
           i18n: {
-            en_US: "Язык - EN",
-            ru_RU: "Язык - RU",
+            en: "Язык - EN",
+            ru: "Язык - RU",
           },
         },
         form: {
@@ -50,7 +50,7 @@ i18next.use(initReactI18next).init({
         },
       },
     },
-    en_US: {
+    en: {
       translation: {
         control: {
           form: {
@@ -65,8 +65,8 @@ i18next.use(initReactI18next).init({
             main: "Start page",
           },
           i18n: {
-            en_US: "Language - EN",
-            ru_RU: "Language - RU",
+            en: "Language - EN",
+            ru: "Language - RU",
           },
         },
         form: {
@@ -98,7 +98,7 @@ i18next.use(initReactI18next).init({
     },
   },
   debug: true,
-  fallbackLng: "en_US",
+  fallbackLng: "en",
   interpolation: {
     escapeValue: false,
   },
