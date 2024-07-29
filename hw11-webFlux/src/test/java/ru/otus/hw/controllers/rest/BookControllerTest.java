@@ -157,6 +157,7 @@ class BookControllerTest {
         var invalidBook = new BookDto("invalidBookId", "a", null, null);
         webTestClient.patch().uri("/api/v1/books")
                 .contentType(APPLICATION_JSON)
+                .cookie("locale", "en")
                 .bodyValue(invalidBook)
                 .exchange()
                 .expectStatus().isBadRequest()
