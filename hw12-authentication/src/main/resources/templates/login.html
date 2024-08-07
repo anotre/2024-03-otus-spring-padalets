@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="#{login-page-title}">Login</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <h1 th:text="#{login-page-title}">Sign in</h1>
+    <form action="*" th:action="@{/login}" method="post">
+        <label for="username" th:text="#{login-form-username-caption}">Username:</label>
+        <input id="username" name="username" type="text">
+        <br>
+        <label for="password"  th:text="#{login-form-password-caption}">Password:</label>
+        <input id="password" name="password" type="password">
+        <br>
+        <input type="submit" value="Sign in" th:value="#{login-form-submit}">
+    </form>
+    <div th:if="${param.error}" th:text="#{login-form-invalid}">
+        Invalid username and password</div>
+    <div th:if="${param.logout}"  th:text="#{login-form-logout-message}">
+        You have been logged out</div>
+</body>
+</html>

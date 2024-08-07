@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all persons</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+<h3 th:text="${bookDto.title}">Book title</h3>
+
+<table class="books">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Genre</th>
+        <th>Author</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="book" th:object="${bookDto}">
+        <td th:text="*{title}">John Doe</td>
+        <td th:text="*{author.fullName}">Author</td>
+        <td th:text="*{genre.name}">Genre</td>
+        <td>
+            <a href="edit-book.html" th:href="@{/books/edit/__*{id}__}" th:text="#{edit-link-caption}">Edit</a>
+            </br>
+            <form method="post" action="/books/delete" th:action="@{/books/delete/__*{id}__}">
+                <input type="submit" value="Delete" th:value="#{delete-link-caption}">
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a href="/books" th:text="#{to-book-list-link-caption}">Back to books list</a>
+
+<h4 th:text="#{comments-title} + ':'">Comments:</h4>
+<ul>
+    <li th:each="comment : ${comments}" th:text="${comment.text}">comment-text</li>
+</ul>
+</body>
+</html>
+<!--Нужна загрузка комментариев-->
