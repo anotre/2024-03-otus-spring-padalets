@@ -1,9 +1,12 @@
 package ru.otus.hw.models.security;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,13 +21,20 @@ import java.util.Set;
 @Table(name = "users")
 @Data
 @AllArgsConstructor
-public class SimpleUser implements UserDetails {
+public class User implements UserDetails {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String username;
 
     @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(targetEntity = SimpleAuthority.class)
-    @JoinColumn(name = "username")
+    @ManyToMany(targetEntity = CustomGrantedAuthority.class)
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_id")}
+    )
     private Set<GrantedAuthority> authorities;
 
     private String password;
@@ -37,6 +47,6 @@ public class SimpleUser implements UserDetails {
 
     private boolean enabled;
 
-    public SimpleUser() {
+    public User() {
     }
 }

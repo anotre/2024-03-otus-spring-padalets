@@ -2,13 +2,12 @@ package ru.otus.hw.services.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.models.security.SimpleUser;
+import ru.otus.hw.models.security.User;
 import ru.otus.hw.repositories.security.UserDetailsRepository;
 
 @Service
@@ -21,11 +20,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SimpleUser user = userDetailsRepository.findByUsername(username)
+        User user = userDetailsRepository.findByUsername(username)
                 .orElseThrow(
-                        () -> new UsernameNotFoundException(String.format(USERNAME_NOT_FOUND_TEMPLATE_MESSAGE, username)));
+                        () -> new UsernameNotFoundException(
+                                String.format(USERNAME_NOT_FOUND_TEMPLATE_MESSAGE, username)));
 
-        return User.builder()
+        return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .authorities(user.getAuthorities()

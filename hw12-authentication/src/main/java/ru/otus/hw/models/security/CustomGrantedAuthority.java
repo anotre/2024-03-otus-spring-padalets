@@ -11,12 +11,10 @@ import org.springframework.security.core.GrantedAuthority;
 @Entity
 @Table(name = "authorities")
 @Data
-public class SimpleAuthority implements GrantedAuthority {
+public class CustomGrantedAuthority implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    private String username;
 
     private String authority;
 }
