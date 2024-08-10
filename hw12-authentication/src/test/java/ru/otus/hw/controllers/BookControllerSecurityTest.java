@@ -14,22 +14,17 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.otus.hw.config.security.SecurityConfiguration;
-import ru.otus.hw.controllers.dto.AuthorDto;
 import ru.otus.hw.controllers.dto.BookDto;
-import ru.otus.hw.controllers.dto.GenreDto;
 import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
 import ru.otus.hw.services.CommentService;
 import ru.otus.hw.services.GenreService;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -62,22 +57,12 @@ class BookControllerSecurityTest {
             String user,
             GrantedAuthority[] authorities,
             int responseStatus,
-            String redirectUrlPattern,
-            BookDto bookDto
+            String redirectUrlPattern
     ) throws Exception {
         var request = this.methodToRequestBuilder(method, url);
 
         if (Objects.nonNull(user)) {
             request.with(user(user).authorities(authorities));
-        }
-
-        if (Objects.nonNull(bookDto)) {
-            given(this.bookService.findById(1)).willReturn(Optional.of(bookDto));
-            given(this.authorService.findAll()).willReturn(Collections.emptyList());
-            given(this.genreService.findAll()).willReturn(Collections.emptyList());
-            request.param("title", bookDto.getTitle())
-                    .param("author.id", String.valueOf(bookDto.getAuthor().getId()))
-                    .param("genre.id", String.valueOf(bookDto.getGenre().getId()));
         }
 
         ResultActions resultActions = mockMvc.perform(request)
@@ -102,29 +87,24 @@ class BookControllerSecurityTest {
         var authorities = new GrantedAuthority[]{
                 new SimpleGrantedAuthority("ROLE_ADMIN")
         };
-        var genreDto = new GenreDto(1L, "Genre_1");
-        var authorDto = new AuthorDto(1L, "Author_1");
-        var bookDto = new BookDto(1L, "BookTitle_1", authorDto, genreDto);
-
-
         return Stream.of(
-                Arguments.of("get", "/", user, authorities, 200, "", null),
-                Arguments.of("get", "/", null, null, 302, "**/login", null),
-                Arguments.of("get", "/books", user, authorities, 200, "", null),
-                Arguments.of("get", "/books", null, null, 302, "**/login", null),
-                Arguments.of("get", "/books/1", user, authorities, 200, "", bookDto),
-                Arguments.of("get", "/books/1", null, null, 302, "**/login", bookDto),
-                Arguments.of("get", "/books/create", user, authorities, 200, "", null),
-                Arguments.of("get", "/books/create", null, null, 302, "**/login", null),
-                Arguments.of("get", "/books/edit/1", user, authorities, 200, "", bookDto),
-                Arguments.of("get", "/books/edit/1", null, null, 302, "**/login", bookDto),
+                Arguments.of("get", "/", user, authorities, 200, ""),
+                Arguments.of("get", "/", null, null, 302, "**/login"),
+                Arguments.of("get", "/books", user, authorities, 200, ""),
+                Arguments.of("get", "/books", null, null, 302, "**/login"),
+                Arguments.of("get", "/books/1", user, authorities, 404, ""),
+                Arguments.of("get", "/books/1", null, null, 302, "**/login"),
+                Arguments.of("get", "/books/create", user, authorities, 200, ""),
+                Arguments.of("get", "/books/create", null, null, 302, "**/login"),
+                Arguments.of("get", "/books/edit/1", user, authorities, 404, ""),
+                Arguments.of("get", "/books/edit/1", null, null, 302, "**/login"),
 
-                Arguments.of("post", "/books/create", user, authorities, 302, "/{books}", bookDto),
-                Arguments.of("post", "/books/create", null, null, 302, "**/login", bookDto),
-                Arguments.of("post", "/books/edit", user, authorities, 302, "/{books}", bookDto),
-                Arguments.of("post", "/books/edit", null, null, 302, "**/login", bookDto),
-                Arguments.of("post", "/books/delete/1", user, authorities, 302, "/{books}", null),
-                Arguments.of("post", "/books/delete/1", null, null, 302, "**/login", null)
+                Arguments.of("post", "/books/create", user, authorities, 200, ""),
+                Arguments.of("post", "/books/create", null, null, 302, "**/login"),
+                Arguments.of("post", "/books/edit", user, authorities, 200, ""),
+                Arguments.of("post", "/books/edit", null, null, 302, "**/login"),
+                Arguments.of("post", "/books/delete/1", user, authorities, 302, "/{books}"),
+                Arguments.of("post", "/books/delete/1", null, null, 302, "**/login")
         );
     }
 }
