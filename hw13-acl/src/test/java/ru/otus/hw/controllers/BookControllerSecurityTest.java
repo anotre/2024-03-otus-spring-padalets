@@ -1,5 +1,6 @@
 package ru.otus.hw.controllers;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = {BookController.class})
 @Import({SecurityConfiguration.class})
+@DisplayName("Tests security of book controller")
 class BookControllerSecurityTest {
     private BookDto bookDto;
 
@@ -83,27 +85,45 @@ class BookControllerSecurityTest {
     }
 
     public static Stream<Arguments> getTestData() {
-        var user = "user1";
-        var authorities = new GrantedAuthority[]{
+        var admin = "admin";
+        var user = "userForbidden";
+        var authoritiesAdmin = new GrantedAuthority[]{
                 new SimpleGrantedAuthority("ROLE_ADMIN")
         };
+        var authoritiesForbidden = new GrantedAuthority[]{
+                new SimpleGrantedAuthority("ROLE_FORBIDDEN")
+        };
         return Stream.of(
-                Arguments.of("get", "/", user, authorities, 200, ""),
+                Arguments.of("get", "/", admin, authoritiesAdmin, 200, ""),
+                Arguments.of("get", "/", user, authoritiesForbidden, 200, ""),
                 Arguments.of("get", "/", null, null, 302, "**/login"),
-                Arguments.of("get", "/books", user, authorities, 200, ""),
+
+                Arguments.of("get", "/books", admin, authoritiesAdmin, 200, ""),
+                Arguments.of("get", "/books", user, authoritiesForbidden, 403, ""),
                 Arguments.of("get", "/books", null, null, 302, "**/login"),
-                Arguments.of("get", "/books/1", user, authorities, 404, ""),
+
+                Arguments.of("get", "/books/1", admin, authoritiesAdmin, 404, ""),
+                Arguments.of("get", "/books/1", user, authoritiesForbidden, 403, ""),
                 Arguments.of("get", "/books/1", null, null, 302, "**/login"),
-                Arguments.of("get", "/books/create", user, authorities, 200, ""),
+
+                Arguments.of("get", "/books/create", admin, authoritiesAdmin, 200, ""),
+                Arguments.of("get", "/books/create", user, authoritiesForbidden, 403, ""),
                 Arguments.of("get", "/books/create", null, null, 302, "**/login"),
-                Arguments.of("get", "/books/edit/1", user, authorities, 404, ""),
+
+                Arguments.of("get", "/books/edit/1", admin, authoritiesAdmin, 404, ""),
+                Arguments.of("get", "/books/edit/1", user, authoritiesForbidden, 403, ""),
                 Arguments.of("get", "/books/edit/1", null, null, 302, "**/login"),
 
-                Arguments.of("post", "/books/create", user, authorities, 200, ""),
+                Arguments.of("post", "/books/create", admin, authoritiesAdmin, 200, ""),
+                Arguments.of("post", "/books/create", user, authoritiesForbidden, 403, ""),
                 Arguments.of("post", "/books/create", null, null, 302, "**/login"),
-                Arguments.of("post", "/books/edit", user, authorities, 200, ""),
+
+                Arguments.of("post", "/books/edit", admin, authoritiesAdmin, 200, ""),
+                Arguments.of("post", "/books/edit", user, authoritiesForbidden, 403, ""),
                 Arguments.of("post", "/books/edit", null, null, 302, "**/login"),
-                Arguments.of("post", "/books/delete/1", user, authorities, 302, "/{books}"),
+
+                Arguments.of("post", "/books/delete/1", admin, authoritiesAdmin, 302, "/{books}"),
+                Arguments.of("post", "/books/delete/1", user, authoritiesForbidden, 403, ""),
                 Arguments.of("post", "/books/delete/1", null, null, 302, "**/login")
         );
     }

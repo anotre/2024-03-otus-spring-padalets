@@ -41,6 +41,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public BookDto insert(String title, long authorId, long genreId) {
         var book = save(0, title, authorId, genreId);
+
         return bookDtoConverter.toDto(book);
     }
 

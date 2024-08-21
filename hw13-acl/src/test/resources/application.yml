@@ -11,3 +11,9 @@ spring:
     locations:
       - "classpath:db/migration/test-data"
       - "classpath:db/migration/scheme"
+  cache:
+    cache-names:
+      - "security/acl"
+  logging:
+    level:
+      root: debug

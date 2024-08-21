@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayName("Сервис для работы с сущностями комментариев")
-@ComponentScan({"ru.otus.hw.repositories", "ru.otus.hw.services", "ru.otus.hw.controllers.dto"})
+@ComponentScan(value = {"ru.otus.hw.repositories", "ru.otus.hw.controllers.dto"})
+@Import({CommentServiceImpl.class})
 @Transactional(propagation = Propagation.NEVER)
 class CommentServiceImplTest {
     private static final long EXPECTED_COMMENT_ID = 1L;
