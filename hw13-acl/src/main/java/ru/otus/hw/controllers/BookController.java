@@ -3,7 +3,6 @@ package ru.otus.hw.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,7 +30,6 @@ public class BookController {
     private final GenreService genreService;
 
     @GetMapping("/books")
-    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     public String booksList(Model model) {
         var books = bookService.findAll();
         model.addAttribute("books", books);
@@ -40,7 +38,6 @@ public class BookController {
     }
 
     @GetMapping("/books/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     public String book(@PathVariable("id") long id, Model model) {
         var book = bookService.findById(id).orElseThrow(NotFoundException::new);
         var comments = commentService.findByBookId(id);
@@ -51,7 +48,6 @@ public class BookController {
     }
 
     @GetMapping("/books/create")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public String create(Model model) {
         model.addAttribute("authors", authorService.findAll());
         model.addAttribute("genres", genreService.findAll());
@@ -60,7 +56,6 @@ public class BookController {
     }
 
     @GetMapping(value = "/books/edit/{id}")
-    @PreAuthorize("hasPermission(#id, 'ru.otus.hw.models.Book', 'WRITE') || hasAuthority('ROLE_ADMIN')")
     public String edit(@PathVariable("id") long id, Model model) {
         var book = bookService.findById(id).orElseThrow(NotFoundException::new);
         model.addAttribute("authors", authorService.findAll());
@@ -71,7 +66,6 @@ public class BookController {
     }
 
     @PostMapping("/books/create")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public String create(@Valid BookDto bookDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("authors", authorService.findAll());
@@ -88,7 +82,6 @@ public class BookController {
     }
 
     @PostMapping("/books/edit")
-    @PreAuthorize("hasPermission(#bookDto.id, 'ru.otus.hw.models.Book', 'WRITE') || hasAuthority('ROLE_ADMIN')")
     public String edit(@Valid BookDto bookDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("authors", authorService.findAll());
@@ -106,7 +99,6 @@ public class BookController {
     }
 
     @PostMapping("/books/delete/{id}")
-    @PreAuthorize("hasPermission(#id, 'ru.otus.hw.models.Book', 'DELETE') || hasAuthority('ROLE_ADMIN')")
     public String deleteById(@PathVariable("id") long id) {
         bookService.deleteById(id);
         return "redirect:/books";

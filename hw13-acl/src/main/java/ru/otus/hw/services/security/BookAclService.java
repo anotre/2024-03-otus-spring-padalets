@@ -14,12 +14,12 @@ import java.io.Serializable;
 
 @Service
 @RequiredArgsConstructor
-public class BookAclService implements AclService<Book> {
+public class BookAclService implements AclService {
     private final MutableAclService aclService;
 
     @Override
     @Transactional
-    public void createAclFor(Book object) {
+    public void createAclFor(Object object) {
         var oid = new ObjectIdentityImpl(object);
         var acl = this.aclService.createAcl(oid);
         var authentication = SecurityContextHolder.getContext().getAuthentication();
