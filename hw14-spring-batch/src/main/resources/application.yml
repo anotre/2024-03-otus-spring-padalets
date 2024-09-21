@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: "DataMigrationApplication"
+  main:
+    allow-circular-references: true
+
+  batch:
+    job:
+      enabled: false
+
+  shell:
+    interactive:
+      enabled: true
+    noninteractive:
+      enabled: false
+    command:
+      version:
+        enabled: false
+
+  data:
+    mongodb:
+      uri: mongodb://mongoadmin:secret@localhost:27117/
+      database: book_library
+
+  datasource:
+    url: jdbc:h2:mem:maindb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  flyway:
+    enabled: true
+    locations:
+      - "classpath:db/migration/scheme"
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
