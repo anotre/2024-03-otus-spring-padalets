@@ -3,60 +3,65 @@ package ru.otus.hw.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.otus.hw.config.PostOfficeProperties;
-import ru.otus.hw.dao.Dao;
-import ru.otus.hw.domain.Addressee;
+import ru.otus.hw.dao.AddresseeDao;
 import ru.otus.hw.domain.PostItem;
+import ru.otus.hw.service.factory.PostItemFactory;
 import ru.otus.hw.service.integration.PostOfficeGateway;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class PostOfficeServiceImpl implements PostOfficeService {
-    private static final int HOUR = 10000;
+    private static final int HOUR = 5_000;
 
     private static final int WORKDAY = 3;
 
+    private static final int MIN_POST_ITEMS_LOAD = 0;
+
+    private static final int MAX_POST_ITEMS_LOAD = 400;
+
     private final PostOfficeGateway gateway;
 
-    private final PostOfficeProperties postOfficeProperties;
+    private final AddresseeDao addresseeDao;
 
-    private final Dao<Addressee> addresseeDao;
+    private final List<PostItemFactory> postItemFactories;
 
     public void doWork() {
-        ForkJoinPool pool = ForkJoinPool.commonPool();
+        var pool = Executors.newFixedThreadPool(WORKDAY);
 
         for (int i = 0; i < WORKDAY; i++) {
             pool.execute(() -> {
                 List<PostItem> postItems = this.getPostItems();
                 gateway.process(postItems);
             });
-            this.delay();
+
+            this.waitLoad();
         }
     }
 
     private List<PostItem> getPostItems() {
         int postItemsAmount = ThreadLocalRandom.current()
-                .nextInt(postOfficeProperties.getMin(), postOfficeProperties.getMax());
+                .nextInt(MIN_POST_ITEMS_LOAD, MAX_POST_ITEMS_LOAD);
         return this.generatePostItems(postItemsAmount);
     }
 
     private List<PostItem> generatePostItems(int amount) {
         List<PostItem> postItems = new ArrayList<>();
-        var postItemsTypes = PostItems.values();
         var addressees = addresseeDao.getAll();
+        var postItemTypesNumber = this.postItemFactories.size();
+        var addresseesNumber = addressees.size();
 
         for (int i = 0; i < amount; i++) {
-            var typeIndex = ThreadLocalRandom.current().nextInt(0, postItemsTypes.length);
-            var addresseeIndex = ThreadLocalRandom.current().nextInt(0, addressees.size());
-            var postItemType = postItemsTypes[typeIndex];
+            var typeIndex = ThreadLocalRandom.current().nextInt(0, postItemTypesNumber);
+            var addresseeIndex = ThreadLocalRandom.current().nextInt(0, addresseesNumber);
+            var factory = this.postItemFactories.get(typeIndex);
             postItems.add(
-                    PostItemSimpleFactory.createPostItem(postItemType, addressees.get(addresseeIndex))
+                    factory.create(addressees.get(addresseeIndex))
             );
         }
 
@@ -65,7 +70,7 @@ public class PostOfficeServiceImpl implements PostOfficeService {
         return postItems;
     }
 
-    private void delay() {
+    private void waitLoad() {
         try {
             Thread.sleep(HOUR);
         } catch (InterruptedException e) {

@@ -2,7 +2,3 @@ logging:
   level:
     root: info
     org.springframework.integration: error
-post-office:
-  load:
-    min: 0
-    max: 400

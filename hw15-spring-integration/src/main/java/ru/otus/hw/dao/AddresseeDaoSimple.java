@@ -1,18 +1,21 @@
 package ru.otus.hw.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.otus.hw.domain.Addressee;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 @RequiredArgsConstructor
-public class AddresseeDaoImpl implements Dao<Addressee> {
+public class AddresseeDaoSimple implements AddresseeDao {
     private final Map<Long, Addressee> addresses;
 
-    public AddresseeDaoImpl() {
+    public AddresseeDaoSimple() {
         var addressBookMap = new HashMap<Long, Addressee>();
         addressBookMap.put(1L, new Addressee(1L, "firstAddresseeFlow.input"));
         addressBookMap.put(2L, new Addressee(2L, "secondAddresseeFlow.input"));
