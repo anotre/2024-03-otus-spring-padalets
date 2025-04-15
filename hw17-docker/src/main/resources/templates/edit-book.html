@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{edit-book-page-title}">Edit book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        .error-text {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h3 th:text="#{edit-book-page-title}">Book edit form</h3>
+
+<form id="book-edit-form" th:action="@{/books/edit}" th:method="post" th:object="${bookDto}" action="/books/edit-book.html">
+    <table class="edit-form">
+        <thead>
+        <tr>
+            <th th:text="#{book-title-table-column}">Title</th>
+            <th th:text="#{book-author-table-column}">Author</th>
+            <th th:text="#{book-genre-table-column}">Genre</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <input name="id" type="hidden" value="" th:value="*{id}" readonly>
+                <input name="title" type="text"
+                    th:value="*{title}" value=""
+                    th:placeholder="#{input-book-title-placeholder}" placeholder="Book title">
+            </td>
+            <td>
+                <select name="author.id" id="author.id">
+                    <option value="" th:text="#{input-book-author-placeholder}" disabled>Author name</option>
+                    <option th:each="author : ${authors}" th:object="${author}"
+                            th:value="*{id}" value=""
+                            th:text="*{fullName}"
+                            th:selected="${bookDto.author}? ${bookDto.author.id} == *{id}">
+                    </option>
+                </select>
+            </td>
+            <td>
+                <select name="genre.id" id="genre.id">
+                    <option value="" th:text="#{input-book-genre-placeholder}" disabled>Genre name</option>
+                    <option th:each="genre : ${genres}" th:object="${genre}"
+                            th:value="*{id}" value=""
+                            th:text="*{name}"
+                            th:selected="${bookDto.genre}? ${bookDto.genre.id} == *{id}">
+                    </option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p th:if="#{fields.hasErrors('title')}" th:errors="*{title}" class="error-text">Errors in title field</p>
+    <p th:if="#{fields.hasErrors('author.id')}" th:errors="*{author.id}" class="error-text">Errors in author field</p>
+    <p th:if="#{fields.hasErrors('genre.id')}" th:errors="*{genre.id}" class="error-text">Errors in genre field</p>
+    <button type="submit" th:text="#{save-link-caption}">Save</button>
+    </br>
+    <input type="reset" value="reset" th:value="#{reset-link-caption}">
+</form>
+<a href="books-list.html" th:href="@{/books}" th:text="#{to-book-list-link-caption}">Back to list</a>
+</body>
+</html>
