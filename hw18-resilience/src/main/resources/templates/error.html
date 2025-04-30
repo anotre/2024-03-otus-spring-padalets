@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{error-page-title}">Internal server error</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1 th:text="#{error-page-title}">Internal server error</h1>
+    <a href="/books" th:text="#{to-book-list-link-caption}">Back to books list</a>
+    </br>
+    <a href="/" th:text="#{to-root-link-caption}">Back to main</a>
+</body>
+</html>
