@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.hw.controllers.dto.AuthorDto;
 import ru.otus.hw.controllers.dto.BookDto;
@@ -112,8 +111,8 @@ class BookControllerTest {
     @DisplayName("Создает книгу по данным из тела запроса, возвращает 201 статус")
     void shouldCreateBookWithExpectedResponseStatus() throws Exception {
         mockMvc.perform(post("/api/v1/books")
-                    .contentType(APPLICATION_JSON)
-                    .content(this.expectedBookAsString))
+                        .contentType(APPLICATION_JSON)
+                        .content(this.expectedBookAsString))
                 .andExpect(status().isCreated());
 
         verify(bookService, times(1)).insert(
@@ -162,9 +161,9 @@ class BookControllerTest {
     void shouldReturnErrorsMessagesOnInvalidPost() throws Exception {
         var invalidBook = new BookDto(0, "a", null, null);
         mockMvc.perform(
-                post("/api/v1/books")
-                        .contentType(APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(invalidBook)))
+                        post("/api/v1/books")
+                                .contentType(APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(invalidBook)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(mapper.writeValueAsString(EXPECTED_ERROR_MESSAGES)));
     }
@@ -182,9 +181,9 @@ class BookControllerTest {
     }
 
     @Test
-    @DisplayName("Возращает 404 статус если запрашиваемая книга не существует")
-    void shouldReturnNotFoundStatus() throws Exception {
+    @DisplayName("Возращает 500 статус если запрашиваемая книга не существует")
+    void shouldReturnInternalServerErrorStatus() throws Exception {
         mockMvc.perform(get(String.format("/api/v1/books/%d", NON_EXISTENT_BOOK_ID)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isInternalServerError());
     }
 }

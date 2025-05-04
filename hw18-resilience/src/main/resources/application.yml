@@ -20,3 +20,12 @@ spring:
       - "classpath:db/migration/scheme"
   messages:
     encoding: UTF-8
+resilience4j.circuitbreaker:
+    configs:
+      dbCircuitBreakerConfig:
+        slowCallRateThreshold: 5
+        slowCallDurationThreshold: 500ms
+        minimumNumberOfCalls: 16
+    instances:
+      dbCircuitBreaker:
+        baseConfig: dbCircuitBreakerConfig

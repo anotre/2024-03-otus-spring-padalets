@@ -26,7 +26,7 @@
             https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml
         </checkstyle.config.url>
         <reflections.version>0.10.2</reflections.version>
-        <resilience4j.version>2.3.0</resilience4j.version>
+        <springBootCircuitBreaker.version>3.0.4</springBootCircuitBreaker.version>
     </properties>
 
     <dependencies>
@@ -71,9 +71,9 @@
         </dependency>
 
         <dependency>
-            <groupId>io.github.resilience4j</groupId>
-            <artifactId>resilience4j-spring-boot3</artifactId>
-            <version>${resilience4j.version}</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+            <version>${springBootCircuitBreaker.version}</version>
         </dependency>
 
         <dependency>
