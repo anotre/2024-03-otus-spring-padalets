@@ -8,8 +8,13 @@ import ru.otus.hw.controllers.exceptions.NotFoundException;
 
 @RestControllerAdvice("ru.otus.hw.controllers.rest")
 public class LibraryControllersAdvice {
-    @ExceptionHandler({NotFoundException.class, CallNotPermittedException.class})
-    public ResponseEntity<String> handleNotFound(RuntimeException exception) {
+    @ExceptionHandler({CallNotPermittedException.class})
+    public ResponseEntity<String> handleOpenedCircuitBreaker(RuntimeException exception) {
         return ResponseEntity.internalServerError().build();
+    }
+
+    @ExceptionHandler({NotFoundException.class})
+    public ResponseEntity<String> handleNotFound(RuntimeException exception) {
+        return ResponseEntity.notFound().build();
     }
 }
