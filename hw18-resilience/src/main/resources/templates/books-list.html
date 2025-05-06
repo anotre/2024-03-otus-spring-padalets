@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{books-list-page-title}">Library</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h3 th:text="#{books-list-main-header}">Books:</h3>
+
+    <table class="books">
+        <thead>
+            <tr>
+                <th th:text="#{book-id-table-column}">ID</th>
+                <th th:text="#{book-title-table-column}">Title</th>
+                <th th:text="#{book-author-table-column}">Author</th>
+                <th th:text="#{book-genre-table-column}">Genre</th>
+                <th th:text="#{book-actions-table-column}">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="book : ${books}" th:object="${book}">
+                <td th:text="*{id}">0</td>
+                <td><a th:text="*{title}" th:href="@{/books/__*{id}__}">book title</a></td>
+                <td th:text="*{author.fullName}">author name</td>
+                <td th:text="*{genre.name}">genre</td>
+                <td>
+                    <a href="books/edit" th:href="@{books/edit/__*{id}__}" th:text="#{edit-link-caption}">Edit</a>
+                    </br>
+                    <form method="post" action="/books/delete" th:action="@{/books/delete/__*{id}__}">
+                        <input type="submit" value="Delete" th:value="#{delete-link-caption}">
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/books/create" th:text="#{create-book-link-caption}">Create book</a>
+    </br>
+    <a href="/" th:text="#{to-root-link-caption}">Back to main page</a>
+</body>
+</html>
