@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-settlements-initial-data" author="notre">
+        <insert tableName="settlements">
+            <column name="id" value="1"/>
+            <column name="name" value="Москва"/>
+            <column name="region_id" value="77"/>
+        </insert>
+        <insert tableName="settlements">
+            <column name="id" value="2"/>
+            <column name="name" value="Санкт-Петербург"/>
+            <column name="region_id" value="78"/>
+        </insert>
+
+        <sql>
+            ALTER TABLE settlements ALTER COLUMN id RESTART WITH 3;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

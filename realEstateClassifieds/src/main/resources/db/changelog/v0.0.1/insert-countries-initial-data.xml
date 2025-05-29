@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-countries-initial-data" author="notre">
+        <insert tableName="countries">
+            <column name="id" value="1" />
+            <column name="name" value="Российская Федерация"/>
+        </insert>
+
+        <sql>
+            ALTER TABLE countries ALTER COLUMN id RESTART WITH 2;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

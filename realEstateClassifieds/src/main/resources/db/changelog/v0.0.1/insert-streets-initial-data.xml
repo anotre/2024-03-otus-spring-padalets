@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-streets-initial-data" author="notre">
+        <insert tableName="streets">
+            <column name="name" value="Электролитный проспект"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Улица Арбат"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Улица Тверская"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Ленинский проспект"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Новинский бульвар"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Улица Профсоюзная"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Кутузовский проспект"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Садовое кольцо"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Варшавское шоссе"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Калужское шоссе"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Щёлковское шоссе"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Лубянка площадь"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Пушкинская площадь"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Большая Никитская улица"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Семеновская площадь"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Рязанский проспект"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Космодамианская набережная"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Пятницкая улица"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Каховка улица"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+        <insert tableName="streets">
+            <column name="name" value="Преображенская площадь"/>
+            <column name="settlement_id" value="1"/>
+        </insert>
+
+        <sql>
+            ALTER TABLE streets ALTER COLUMN id RESTART WITH 21;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
+

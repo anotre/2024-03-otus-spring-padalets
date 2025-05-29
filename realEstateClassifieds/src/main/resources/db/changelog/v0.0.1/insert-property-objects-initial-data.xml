@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-property-objects-initial-data" author="notre">
+        <insert tableName="property_objects">
+            <column name="id" value="1"/>
+            <column name="address_id" value="1"/>
+            <column name="total_area" value="123.0"/>
+            <column name="kitchen_area" value="23.0"/>
+            <column name="living_area" value="100.0"/>
+            <column name="residential_floor_area" value="0"/>
+            <column name="construction_method_id" value="1"/>
+            <column name="room_number" value="2"/>
+            <column name="bathroom_number" value="2"/>
+            <column name="ceiling_height" value="3.0"/>
+            <column name="balcony_type_id" value="1"/>
+            <column name="floor_number" value="1"/>
+            <column name="furnished_type_id" value="1"/>
+        </insert>
+        <insert tableName="property_objects">
+            <column name="id" value="2"/>
+            <column name="address_id" value="2"/>
+            <column name="total_area" value="124.0"/>
+            <column name="kitchen_area" value="24.0"/>
+            <column name="living_area" value="100.0"/>
+            <column name="residential_floor_area" value="0"/>
+            <column name="construction_method_id" value="1"/>
+            <column name="room_number" value="2"/>
+            <column name="bathroom_number" value="2"/>
+            <column name="ceiling_height" value="3.0"/>
+            <column name="balcony_type_id" value="1"/>
+            <column name="floor_number" value="1"/>
+            <column name="furnished_type_id" value="1"/>
+        </insert>
+        <insert tableName="property_objects">
+            <column name="id" value="3"/>
+            <column name="address_id" value="3"/>
+            <column name="total_area" value="125.0"/>
+            <column name="kitchen_area" value="25.0"/>
+            <column name="living_area" value="100.0"/>
+            <column name="residential_floor_area" value="0"/>
+            <column name="construction_method_id" value="1"/>
+            <column name="room_number" value="2"/>
+            <column name="bathroom_number" value="2"/>
+            <column name="ceiling_height" value="3.0"/>
+            <column name="balcony_type_id" value="1"/>
+            <column name="floor_number" value="1"/>
+            <column name="furnished_type_id" value="1"/>
+        </insert>
+        <insert tableName="property_objects">
+            <column name="id" value="4"/>
+            <column name="address_id" value="4"/>
+            <column name="total_area" value="126.0"/>
+            <column name="kitchen_area" value="26.0"/>
+            <column name="living_area" value="100.0"/>
+            <column name="residential_floor_area" value="0"/>
+            <column name="construction_method_id" value="1"/>
+            <column name="room_number" value="2"/>
+            <column name="bathroom_number" value="2"/>
+            <column name="ceiling_height" value="3.0"/>
+            <column name="balcony_type_id" value="1"/>
+            <column name="floor_number" value="1"/>
+            <column name="furnished_type_id" value="1"/>
+        </insert>
+        <insert tableName="property_objects">
+            <column name="id" value="5"/>
+            <column name="address_id" value="5"/>
+            <column name="total_area" value="126.0"/>
+            <column name="kitchen_area" value="26.0"/>
+            <column name="living_area" value="100.0"/>
+            <column name="residential_floor_area" value="0"/>
+            <column name="construction_method_id" value="1"/>
+            <column name="room_number" value="2"/>
+            <column name="bathroom_number" value="2"/>
+            <column name="ceiling_height" value="3.0"/>
+            <column name="balcony_type_id" value="1"/>
+            <column name="floor_number" value="1"/>
+            <column name="furnished_type_id" value="1"/>
+        </insert>
+        <insert tableName="property_objects">
+            <column name="id" value="6"/>
+            <column name="address_id" value="6"/>
+            <column name="total_area" value="127.0"/>
+            <column name="kitchen_area" value="27.0"/>
+            <column name="living_area" value="100.0"/>
+            <column name="residential_floor_area" value="0"/>
+            <column name="construction_method_id" value="1"/>
+            <column name="room_number" value="2"/>
+            <column name="bathroom_number" value="2"/>
+            <column name="ceiling_height" value="3.0"/>
+            <column name="balcony_type_id" value="1"/>
+            <column name="floor_number" value="1"/>
+            <column name="furnished_type_id" value="1"/>
+        </insert>
+        <insert tableName="property_objects">
+            <column name="id" value="7"/>
+            <column name="address_id" value="7"/>
+            <column name="total_area" value="128.0"/>
+            <column name="kitchen_area" value="28.0"/>
+            <column name="living_area" value="100.0"/>
+            <column name="residential_floor_area" value="0"/>
+            <column name="construction_method_id" value="1"/>
+            <column name="room_number" value="2"/>
+            <column name="bathroom_number" value="2"/>
+            <column name="ceiling_height" value="3.0"/>
+            <column name="balcony_type_id" value="1"/>
+            <column name="floor_number" value="1"/>
+            <column name="furnished_type_id" value="1"/>
+        </insert>
+        <insert tableName="property_objects">
+            <column name="id" value="8"/>
+            <column name="address_id" value="8"/>
+            <column name="total_area" value="129.0"/>
+            <column name="kitchen_area" value="29.0"/>
+            <column name="living_area" value="100.0"/>
+            <column name="residential_floor_area" value="0"/>
+            <column name="construction_method_id" value="1"/>
+            <column name="room_number" value="2"/>
+            <column name="bathroom_number" value="2"/>
+            <column name="ceiling_height" value="3.0"/>
+            <column name="balcony_type_id" value="1"/>
+            <column name="floor_number" value="1"/>
+            <column name="furnished_type_id" value="1"/>
+        </insert>
+        <insert tableName="property_objects">
+            <column name="id" value="9"/>
+            <column name="address_id" value="9"/>
+            <column name="total_area" value="121.0"/>
+            <column name="kitchen_area" value="21.0"/>
+            <column name="living_area" value="100.0"/>
+            <column name="residential_floor_area" value="0"/>
+            <column name="construction_method_id" value="1"/>
+            <column name="room_number" value="2"/>
+            <column name="bathroom_number" value="2"/>
+            <column name="ceiling_height" value="3.0"/>
+            <column name="balcony_type_id" value="1"/>
+            <column name="floor_number" value="1"/>
+            <column name="furnished_type_id" value="1"/>
+        </insert>
+
+        <sql>
+            ALTER TABLE property_objects ALTER COLUMN id RESTART WITH 10;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

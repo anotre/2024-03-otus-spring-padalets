@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-users-initial-data" author="notre">
+        <insert tableName="users">
+            <column name="id" value="1" />
+            <column name="login" value="aivazovsky"/>
+            <column name="first_name" value="Иван"/>
+            <column name="last_name" value="Айвазовский"/>
+            <column name="patronymic" value="Константинович"/>
+            <column name="password" value="secret"/>
+            <column name="email_id" value="1"/>
+            <column name="phone_number_id" value="1"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="2" />
+            <column name="login" value="alekseev"/>
+            <column name="first_name" value="Федор"/>
+            <column name="last_name" value="Алексеев"/>
+            <column name="patronymic" value="Яковлевич"/>
+            <column name="password" value="secret"/>
+            <column name="email_id" value="2"/>
+            <column name="phone_number_id" value="2"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="3" />
+            <column name="login" value="anohin"/>
+            <column name="first_name" value="Николай"/>
+            <column name="last_name" value="Анохин"/>
+            <column name="patronymic" value="Юрьевич"/>
+            <column name="password" value="secret"/>
+            <column name="email_id" value="3"/>
+            <column name="phone_number_id" value="3"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="4" />
+            <column name="login" value="antipova"/>
+            <column name="first_name" value="Евгения"/>
+            <column name="last_name" value="Антипова"/>
+            <column name="patronymic" value="Петровна"/>
+            <column name="password" value="secret"/>
+            <column name="email_id" value="4"/>
+            <column name="phone_number_id" value="4"/>
+        </insert>
+
+        <sql>
+            ALTER TABLE users ALTER COLUMN id RESTART WITH 5;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
