@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-construction-methods-initial-data" author="notre">
+        <insert tableName="construction_methods">
+            <column name="id" value="1" />
+            <column name="name" value="Панельный"/>
+        </insert>
+        <insert tableName="construction_methods">
+            <column name="id" value="2" />
+            <column name="name" value="Монолитный"/>
+        </insert>
+        <insert tableName="construction_methods">
+            <column name="id" value="3" />
+            <column name="name" value="Блочный"/>
+        </insert>
+        <insert tableName="construction_methods">
+            <column name="id" value="4" />
+            <column name="name" value="Деревянный"/>
+        </insert>
+        <insert tableName="construction_methods">
+            <column name="id" value="5" />
+            <column name="name" value="Кирпичный"/>
+        </insert>
+
+        <sql>
+            ALTER TABLE construction_methods ALTER COLUMN id RESTART WITH 6;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-emails-initial-data" author="notre">
+        <insert tableName="emails">
+            <column name="id" value="1" />
+            <column name="email" value="test1@yandex.ru"/>
+        </insert>
+        <insert tableName="emails">
+            <column name="id" value="2" />
+            <column name="email" value="test2@yandex.ru"/>
+        </insert>
+        <insert tableName="emails">
+            <column name="id" value="3" />
+            <column name="email" value="test3@yandex.ru"/>
+        </insert>
+        <insert tableName="emails">
+            <column name="id" value="4" />
+            <column name="email" value="test4@yandex.ru"/>
+        </insert>
+
+        <sql>
+            ALTER TABLE emails ALTER COLUMN id RESTART WITH 5;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

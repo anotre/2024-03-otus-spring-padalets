@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-balcony-types-initial-data" author="notre">
+        <insert tableName="balcony_types">
+            <column name="id" value="1"/>
+            <column name="type" value="Лоджия"/>
+        </insert>
+        <insert tableName="balcony_types">
+            <column name="id" value="2"/>
+            <column name="type" value="Балкон"/>
+        </insert>
+
+        <sql>
+            ALTER TABLE balcony_types ALTER COLUMN id RESTART WITH 3;
+        </sql>
+    </changeSet>
+</databaseChangeLog>

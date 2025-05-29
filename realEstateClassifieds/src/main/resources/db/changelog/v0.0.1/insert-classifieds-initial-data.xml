@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="insert-classifieds-initial-data" author="notre">
+        <insert tableName="classifieds">
+            <column name="title" value="classified title"/>
+            <column name="user_id" value="1"/>
+            <column name="property_object_id" value="1"/>
+            <column name="description" value="description text"/>
+            <column name="price" value="1000000" />
+        </insert>
+        <insert tableName="classifieds">
+            <column name="title" value="classified title"/>
+            <column name="user_id" value="2"/>
+            <column name="property_object_id" value="2"/>
+            <column name="description" value="description text"/>
+            <column name="price" value="2000000" />
+        </insert>
+        <insert tableName="classifieds">
+            <column name="title" value="classified title"/>
+            <column name="user_id" value="3"/>
+            <column name="property_object_id" value="3"/>
+            <column name="description" value="description text"/>
+            <column name="price" value="3000000" />
+        </insert>
+        <insert tableName="classifieds">
+            <column name="title" value="classified title"/>
+            <column name="user_id" value="4"/>
+            <column name="property_object_id" value="4"/>
+            <column name="description" value="description text"/>
+            <column name="price" value="4000000" />
+        </insert>
+
+        <sql>
+            ALTER TABLE classifieds ALTER COLUMN id RESTART WITH 5;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
+

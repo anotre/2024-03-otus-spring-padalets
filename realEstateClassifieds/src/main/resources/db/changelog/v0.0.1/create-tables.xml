@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="create-tables" author="notre">
+        <!--    Address components    -->
+        <createTable tableName="countries">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(127)"/>
+        </createTable>
+
+        <createTable tableName="regions">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="country_id" type="bigint">
+                <constraints foreignKeyName="regions_country_id" references="countries(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="settlements">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="region_id" type="bigint">
+                <constraints foreignKeyName="settlements_region_id" references="regions(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="streets">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="settlement_id" type="bigint">
+                <constraints foreignKeyName="streets_settlement_id" references="settlements(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="addresses">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="street_id" type="bigint">
+                <constraints foreignKeyName="address_street_id" references="streets(id)"/>
+            </column>
+            <column name="building_number" type="varchar(127)"/>
+            <column name="apartment_number" type="varchar(127)"/>
+        </createTable>
+
+        <!-- Таблицы структуры объявления -->
+        <createTable tableName="emails">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="email" type="varchar(255)"/>
+        </createTable>
+
+        <createTable tableName="phone_numbers">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="phone_number" type="varchar(18)"/>
+        </createTable>
+
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="login" type="varchar(63)"/>
+            <column name="first_name" type="varchar(63)"/>
+            <column name="last_name" type="varchar(63)"/>
+            <column name="patronymic" type="varchar(63)"/>
+            <column name="password" type="varchar(63)"/>
+            <column name="email_id" type="bigint">
+                <constraints foreignKeyName="users_email_id" references="emails(id)"/>
+            </column>
+            <column name="phone_number_id" type="bigint">
+                <constraints foreignKeyName="users_phone_number_id" references="phone_numbers(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="construction_methods">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(127)"/>
+        </createTable>
+
+        <createTable tableName="balcony_types">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="type" type="varchar(127)"/>
+        </createTable>
+
+        <createTable tableName="furnished_types">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="type" type="varchar(127)"/>
+        </createTable>
+
+        <createTable tableName="property_objects">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="address_id" type="bigint">
+                <constraints foreignKeyName="property_objects_address_id" references="addresses(id)"/>
+            </column>
+            <column name="construction_method_id" type="bigint">
+                <constraints foreignKeyName="property_objects_construction_method_id" references="construction_methods(id)"/>
+            </column>
+            <column name="balcony_type_id" type="bigint">
+                <constraints foreignKeyName="property_objects_balcony_type_id" references="balcony_types(id)"/>
+            </column>
+            <column name="furnished_type_id" type="bigint">
+                <constraints foreignKeyName="property_objects_furnished_type_id" references="furnished_types(id)"/>
+            </column>
+            <column name="total_area" type="number(5, 1)"/>
+            <column name="kitchen_area" type="number(5, 1)"/>
+            <column name="living_area" type="number(5, 1)"/>
+            <column name="residential_floor_area" type="number(5, 1)"/>
+            <column name="room_number" type="int"/>
+            <column name="bathroom_number" type="int"/>
+            <column name="floor_number" type="int"/>
+            <column name="ceiling_height" type="number(3, 1)"/>
+        </createTable>
+
+        <createTable tableName="classifieds">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="title" type="varchar(255)"/>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="classifieds_user_id" references="users(id)"/>
+            </column>
+            <column name="property_object_id" type="bigint">
+                <constraints foreignKeyName="classifieds_property_object_id" references="property_objects(id)"/>
+            </column>
+            <column name="description" type="varchar(2047)"/>
+            <column name="price" type="bigint" />
+            <column name="created_at" type="timestamptz" />
+            <column name="updated_at" type="timestamptz" />
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
